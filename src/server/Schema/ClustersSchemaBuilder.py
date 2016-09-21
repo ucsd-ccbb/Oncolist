@@ -1,0 +1,78 @@
+__author__ = 'guorongxu'
+
+import sys
+
+def build_schema(output_file, prefix):
+    filewriter = open(output_file, "a")
+
+    filewriter.write("curl -XDELETE \'http://localhost:9200/clusters/" + prefix + "\'\n")
+    filewriter.write("curl -XPUT \'http://localhost:9200/clusters/" + prefix + "/_mapping\' -d \'\n")
+    filewriter.write("{\n")
+    filewriter.write("\t\"" + prefix + "\": {\n")
+    filewriter.write("\t\t\"properties\": {\n")
+    filewriter.write("\t\t\t\"source\": {\"type\": " + "\"string\"},\n")
+    filewriter.write("\t\t\t\"version\": {\"type\": " + "\"string\"},\n")
+    filewriter.write("\t\t\t\"species\": {\"type\": " + "\"string\"},\n")
+    filewriter.write("\t\t\t\"network_name\": {\"type\": " + "\"string\"},\n")
+    filewriter.write("\t\t\t\"network_full_name\": {\"type\": " + "\"string\"},\n")
+    filewriter.write("\t\t\t\"network_type\": {\"type\": " + "\"string\"},\n")
+    filewriter.write("\t\t\t\"author_name\": {\"type\": " + "\"string\"},\n")
+    filewriter.write("\t\t\t\"gse_number\": {\"type\": " + "\"string\"},\n")
+    filewriter.write("\t\t\t\"array_num\": {\"type\": " + "\"string\"},\n")
+    filewriter.write("\t\t\t\"institution_name\": {\"type\": " + "\"string\"},\n")
+    filewriter.write("\t\t\t\"gamma\": {\"type\": " + "\"string\"},\n")
+    filewriter.write("\t\t\t\"node_name\": {\"type\": " + "\"string\", \"index\": \"not_analyzed\"},\n")
+    filewriter.write("\t\t\t\"hypergeometric_score\": {\n")
+    filewriter.write("\t\t\t\t\"properties\": {\n")
+    filewriter.write("\t\t\t\t\t\"name\": {\"type\": " + "\"string\"},\n")
+    filewriter.write("\t\t\t\t\t\"GO_id\": {\"type\": " + "\"string\"},\n")
+    filewriter.write("\t\t\t\t\t\"pvalue\": {\"type\": " + "\"double\"},\n")
+    filewriter.write("\t\t\t\t\t\"qvalueLog\": {\"type\": " + "\"float\"},\n")
+    filewriter.write("\t\t\t\t\t\"overlap\": {\"type\": " + "\"integer\"},\n")
+    filewriter.write("\t\t\t\t\t\"genes_from_list\": {\"type\": " + "\"integer\"},\n")
+    filewriter.write("\t\t\t\t\t\"genes_from_GO\": {\"type\": " + "\"integer\"},\n")
+    filewriter.write("\t\t\t\t\t\"description\": {\"type\": " + "\"string\"}\n")
+    filewriter.write("\t\t\t\t}\n")
+    filewriter.write("\t\t\t},\n")
+    filewriter.write("\t\t\t\"max_annotation_conf\": {\"type\": " + "\"float\"},\n")
+    filewriter.write("\t\t\t\"x_node_list_type\": {\"type\": " + "\"string\"},\n")
+    filewriter.write("\t\t\t\"x_node_list\": {\n")
+    filewriter.write("\t\t\t\t\"properties\": {\n")
+    filewriter.write("\t\t\t\t\t\"name\": {\"type\": " + "\"string\", \"index\": \"not_analyzed\"}\n")
+    filewriter.write("\t\t\t\t}\n")
+    filewriter.write("\t\t\t},\n")
+    filewriter.write("\t\t\t\"y_node_list_degree\": {\"type\": " + "\"integer\"},\n")
+    filewriter.write("\t\t\t\"y_node_list_type\": {\"type\": " + "\"string\"},\n")
+    filewriter.write("\t\t\t\"y_node_list\": {\n")
+    filewriter.write("\t\t\t\t\"properties\": {\n")
+    filewriter.write("\t\t\t\t\t\"name\": {\"type\": " + "\"string\", \"index\": \"not_analyzed\"}\n")
+    filewriter.write("\t\t\t\t}\n")
+    filewriter.write("\t\t\t},\n")
+    filewriter.write("\t\t\t\"y_node_list_degree\": {\"type\": " + "\"integer\"},\n")
+    filewriter.write("\t\t\t\"query_node_list\": {\n")
+    filewriter.write("\t\t\t\t\"properties\": {\n")
+    filewriter.write("\t\t\t\t\t\"name\": {\"type\": " + "\"string\", \"index\": \"not_analyzed\"}\n")
+    filewriter.write("\t\t\t\t}\n")
+    filewriter.write("\t\t\t},\n")
+    filewriter.write("\t\t\t\"correlation_matrix\": {\n")
+    filewriter.write("\t\t\t\t\"properties\": {\n")
+    filewriter.write("\t\t\t\t\t\"x_loc\": {\"type\": " + "\"integer\"},\n")
+    filewriter.write("\t\t\t\t\t\"y_loc\": {\"type\": " + "\"integer\"},\n")
+    filewriter.write("\t\t\t\t\t\"correlation_value\": {\"type\": " + "\"float\"},\n")
+    filewriter.write("\t\t\t\t\t\"p_value\": {\"type\": " + "\"double\"}\n")
+    filewriter.write("\t\t\t\t}\n")
+    filewriter.write("\t\t\t},\n")
+    filewriter.write("\t\t\t\"correlation_matrix_degree\": {\"type\": " + "\"integer\"}\n")
+    filewriter.write("\t\t}\n")
+    filewriter.write("\t}\n")
+    filewriter.write("}\n")
+    filewriter.write("\'\n")
+
+## Main entry
+if __name__ == "__main__":
+    output_file = "/Users/guorongxu/Desktop/SearchEngine/TCGA/json_files/clusters.map.sh"
+    prefix = "clusters_tcga_louvain"
+    #output_file = sys.argv[1] + "/" + sys.argv[2] + "/json_files/map.sh"
+    #prefix = sys.argv[3]
+
+    build_schema(output_file, prefix)
