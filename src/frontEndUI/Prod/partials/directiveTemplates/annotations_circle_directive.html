@@ -1,0 +1,27 @@
+<style>
+    .btn-group:hover>.dropdown-menu {
+      display: block;
+    }
+</style>
+<div style="margin-left: 15px; margin-top: 5px; margin-bottom: 2px;" ng-init="annotationSelected=''">
+    <!--<h5>Annotations</h5>-->
+    <form>
+        <input type="hidden" name="option" value="" id="btn-input" />
+        <div class="row" ng-repeat="annotation in annotations" ng-init="displayMe=''">
+            <div class="col-xs-12" style="height: 40px;">
+
+                <div style="margin-top: 5px;" ng-mouseover="info.itemId=annotation.name;">
+                    <h5>
+                      <button id="btn{{$index}}" type="button" style="width: 22px; padding-left: 2px; padding-right:2px;" value="{{annotation.name}}" ng-click="callControllerFunc(annotation.GO_id); displayMe=annotation;" class="btn btn-primary btn-xs pull-left">
+                          <span ng-show="annotationChecked == annotation.GO_id" class="fa fa-square"></span> <span ng-show="annotationChecked != annotation.GO_id">&nbsp;</span>
+                      </button>
+                    <!--<div class="circle-icon" style="width: 24px; cursor: pointer; margin-bottom: 5px; margin-right: 2px; float: left;"></div>-->
+
+                    <div class="pull-left" ng-show="info.itemId == annotation.name;" style="font-size: 12px; margin-top: 4px; cursor: pointer; font-weight: bold; margin-left: 5px; width: 200px; overflow-x: wrap;">{{annotation.name}}</div>
+                    <div class="pull-left" ng-show="info.itemId != annotation.name;" style="font-size: 12px; margin-top: 4px; cursor: pointer; margin-left: 5px;">{{annotation.name | cut:true:30:' ...'}}</div>
+                </h5>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

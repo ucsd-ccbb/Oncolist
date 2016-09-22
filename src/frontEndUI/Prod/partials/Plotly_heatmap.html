@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../js/env.js" type="text/javascript"></script> <!-- TEMP-->
+  <link href="../js/bootstrap-combined.min.css" rel="stylesheet" type="text/css"/> <!-- TEMP -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+  <link href="../js/bootstrap.min.css" rel="stylesheet" type="text/css"/> <!-- TEMP -->
+  <script src="../js/jquery-2.1.1.min.js" type="text/javascript"></script> <!-- TEMP-->
+  <script src="../js/elasticUI/angular.js" type="text/javascript"></script>
+  <script src="../js/lodash.min.js" type="text/javascript"></script> <!-- TEMP-->
+  <script src="../js/services.js" type="text/javascript"></script>
+  <script src="../js/Plotly_heatmapApp.js" type="text/javascript"></script>
+  <script src="https://d14fo0winaifog.cloudfront.net/plotly-basic.js"></script>
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</head>
+<body ng-app="heatmapApp" ng-controller="heatmapCtrl" ng-init="init_page()">
+  <div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-12">
+<!--
+          <button class="btn btn-link" style="padding-bottom: 0px; margin-bottom: -5px;" ng-click="openInNewWindow()">Open in new window</button>
+          <button class="btn btn-link" style="padding-bottom: 0px; margin-bottom: -5px;" ng-click="openExport()">Export</button>
+-->
+          <div id="vizCtrl" name="vizCtrl"></div>
+
+          <div id="evventSpan"></div>
+          <button class="btn btn-link" ng-show="!plotlyData.isNewWindow" style="padding-bottom: 0px; margin-bottom: 0px;" ng-click="openInNewWindow()">Open in new window</button>
+          <div id="heatmapIsLoading"></div>
+<!--
+          <button class="btn btn-success" style="margin-top: 5px;" ng-show="plotlyData.exportRowTarget.length > 0">Export row ({{plotlyData.exportRowTarget}})</button>
+          <button class="btn btn-success" style="margin-top: 5px;" ng-show="plotlyData.exportColumnTarget.length > 0">Export column ({{plotlyData.exportColumnTarget}})</button>
+-->
+          <div id="heatmap" style="height: 400px; width: 200px;"></div>
+          <button class="btn btn-primary" style="margin-top: 5px;" ng-click="resizeHeatMap()"><span ng-show="!plotlyData.isFullSize">View Full Size</span><span ng-show="plotlyData.isFullSize">View Scaled Size</span></button>
+          <button class="btn btn-primary" style="margin-top: 5px;" ng-click="openPlotlyExternal()">Edit Chart</button>
+          <!--<button class="btn btn-primary" style="margin-top: 5px;" ng-click="exportData()">Export All Data</button>-->
+          <div class="btn-group dropup">
+            <button type="button" class="btn btn-primary dropdown-toggle" style="margin-top: 5px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Export <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a ng-click="exportData()" style="cursor: pointer;">All terms and values</a></li>
+              <li><a ng-click="exportXData()" style="cursor: pointer;">X terms ({{plotlyData.xValues.length}}) &nbsp;<i class="fa fa-arrow-right" style="color: #606060;"></i></a></li>
+              <li><a ng-click="exportYData()" style="cursor: pointer;">Y terms ({{plotlyData.yValues.length}}) <i class="fa fa-arrow-down" style="color: #606060;"></i></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

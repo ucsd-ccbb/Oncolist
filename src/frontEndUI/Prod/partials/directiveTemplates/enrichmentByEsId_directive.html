@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+      .scrollable-menu {
+          height: auto;
+          max-height: 200px;
+          overflow-x: hidden;
+      }
+  </style>
+</head>
+<body>
+  <div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-12">
+          <table class="table table-striped">
+            <tr><th>Top enrichment results (Gene Ontologies)</th><th style="white-space: nowrap;">GO ID</th><th style="white-space: nowrap;">Q log value</th></tr>
+            <tr ng-repeat="hg_item in modalData | orderBy:'qvalueLog':true"><td><span style="font-weight: bold;">{{hg_item.name}}</span><br /><div style="font-style: italic; margin-left: 10px;">{{hg_item.description}}</div></td>
+              <td style="white-space: nowrap;">{{hg_item.GO_id}}</td><td style="white-space: nowrap;">{{hg_item.qvalueLog == 0 ? 0.01 : hg_item.qvalueLog}}</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

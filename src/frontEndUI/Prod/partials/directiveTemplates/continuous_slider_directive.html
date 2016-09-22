@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../js/chroma.min.js" type="text/javascript"></script> <!-- TEMP-->
+<style>
+    input[type=range]#{{::uniqueId}}::-webkit-slider-runnable-track
+    {
+        width: 300px;
+        height: 25px;
+        background-image:
+            linear-gradient(to right,{{info.leftColor}},{{info.rightColor}});
+            border: none;
+            border-radius: 6px;
+    }
+    input[type=range]#{{::uniqueId}}{{middleColor}}::-webkit-slider-runnable-track
+    {
+        width: 300px;
+        height: 25px;
+        background-image:
+            linear-gradient(to right,{{info.leftColor}}, {{middleColor}},{{rightColor}});
+            border: none;
+            border-radius: 6px;
+    }
+</style>
+</head>
+<body>
+  <div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-12" style="padding-left: 5px; padding-right: 5px;">
+
+        <div style='font-size: 16px; font-weight: bold; margin-bottom: 5px; margin-left: 10px;'>{{rangeTitle}}  &gt;&#61; {{rangeOutput}}
+
+
+            <button class="btn btn-link" ng-click="reOrderLayout();" style="position: absolute; top: 0px; right: 10px; padding-top: 1px; text-decoration: none;">
+                <i class="fa fa-refresh" aria-hidden="true"></i>
+            </button>
+
+        </div>
+        <!--<h5 class="pull-left" style="margin-top: 5px; margin-right: 3px;">{{rangeMin}}</h5>-->
+        <h5 class="pull-left" style="margin-left; 2px; margin-top: 4px;"><edit-in-place value="rangeMin" on-blur="updateMin()" default="0.0" placeholder="Min"></edit-in-place>&nbsp;</h5>
+        <input class="pull-left" type="range" value=0 id="{{::uniqueId}}{{middleColor}}" ng-model="rangeOutput" min="{{rangeMin}}" max="{{rangeMax}}" step="{{rangeStep}}"
+        style="width:200px; display: inline;"></input> <!--<h5 class="pull-left" style="margin-top: 5px; margin-left: 3px;">{{rangeMax}}</h5>-->
+        <h5 style="margin-left; 15px;">&nbsp;<edit-in-place value="rangeMax" on-blur="updateMax()" default="1.0" placeholder="Max"></edit-in-place></h5>
+
+<!--          <div id="visDiv" name="visDiv" style="height: 500px; width: 500px; border: 1px solid black; margin-top: 50px; margin-left: 50px;"></div>-->
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

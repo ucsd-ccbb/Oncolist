@@ -1,0 +1,15 @@
+<!--         <a ng-repeat="(key, value) in linkid" ng-if="key == 'MedGen'" href="http://www.ncbi.nlm.nih.gov/medgen/?term={{value}}" target="_blank">MedGen ({{value}})</a>-->
+  <span ng-if="ctype === 'CLINVAR'" ng-repeat="linkid in linkids">
+      <a ng-repeat="(key, value) in linkid" ng-if="key == 'OMIM'" href="http://omim.org/entry/{{value}}" target="_blank">Clinvar: {{tissue}}</a>
+  </span>
+  <span class="dropdown" ng-if="ctype === 'COSMIC'">
+<!--   <a href="https://en.wikipedia.org/wiki/{{tissue}}" target="_blank">{{tissue}} Hi</a> -->
+   <a ng-if="result.length > 0" href="http://www.ncbi.nlm.nih.gov/pubmed/{{result[0]}}" target="_blank">{{tissue}}</a>
+   <a ng-if="result.length < 1" href="http://cancer.sanger.ac.uk/cosmic/mutation/overview?id={{linkids[0].replace('COSM','')}}" target="_blank">{{tissue}}</a>
+  </span>
+
+
+<!--  <condition-links ng-if="group_hit.cosmic_genes.length > 0" ctype="'COSMIC'" tissue="group_hit.group_tissue_type" result="group_hit.pubmed_ids" linkids="group_hit.cosmic_id"></condition-links>
+  <condition-links ng-if="group_hit.clinvar_genes.length > 0" ctype="'CLINVAR'" tissue="group_hit.group_tissue_type" result="group_hit" linkids="group_hit.resources"></condition-links>
+  -->
+      <!--<button ng-repeat="cosmic_id in group_hit.cosmic_id" class="btn btn-primary btn-xs">{{cosmic_id}}</button>-->

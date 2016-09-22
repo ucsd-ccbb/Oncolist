@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../../js/chroma.min.js" type="text/javascript"></script>
+<style>
+
+  .node {
+    cursor: pointer;
+    stroke: #3182bd;
+    stroke-width: 0.5px;
+  }
+
+  .node text {
+    font: 5px helvetica;
+  }
+
+  .link {
+    fill: none;
+    stroke: #9ecae1;
+    stroke-width: 0.5px;
+    opacity:.5
+
+  }
+
+  .scrollable-menu {
+      height: auto;
+      max-height: 200px;
+      overflow-x: hidden;
+  }
+
+  @media (min-width: 769px) {
+      .navbar-xs { min-height:28px; height: 28px; }
+      .navbar-xs .navbar-brand{ padding: 0px 12px;font-size: 16px;line-height: 28px; }
+      .navbar-xs .navbar-nav > li > a {  padding-top: 0px; padding-bottom: 0px; line-height: 28px; }
+  }
+  @media (max-width: 768px) {
+      .navbar-xs { min-height:40px; height: 40px; }
+      .navbar-xs .navbar-brand{ padding: 0px 12px;font-size: 16px;line-height: 40px; }
+      .navbar-xs .navbar-nav > li > a {  padding-top: 0px; padding-bottom: 0px; line-height: 40px; }
+  }
+  btn-link:hover {
+      text-decoration: none;
+  }
+
+  .col-xs-12-custom, .col-xs-9-custom, .col-xs-3-custom {
+    position: relative;
+    min-height: 1px;
+    padding-right: 2px;
+    padding-left: 2px;
+  }
+  .col-xs-12-custom, .col-xs-9-custom, .col-xs-3-custom {
+    float: left;
+  }
+  .col-xs-12-custom {
+    width: 100%;
+  }
+  .col-xs-9-custom {
+    width: 75%;
+  }
+  .col-xs-3-custom {
+    width: 25%;
+  }
+  .myHeight {
+      height: calc(100% - 50px);
+      /*height: 500px;*/
+  }
+
+  .sidebar {
+      position: absolute;
+      top: 0px;
+      bottom: 13px;
+      height: 100%;
+      max-height: 720px;
+      right: 0;
+      border-left: 0px solid gainsboro;
+      overflow-y: auto;
+      overflow-x: hidden;
+      z-index: 999;
+      /*background-color: #FDFDFD;*/
+      background-color: rgba(253,253,253,0.3);
+  }
+
+</style>
+</head>
+<body>
+  <div>
+
+    <div class="container-fluid" style="padding: 0px; margin: 0px;">
+      <div class="row" style="height: 100%; width: 100%;" ng-init="showgraphSidebar = false">
+        <div ng-class="showgraphSidebar ? 'col-xs-12-custom' : 'col-xs-12-custom'" id="myClusterModalBodyx" style="height: 100%;">
+            <span class="pull-left hidden-xs" style="padding-bottom: 0px; margin-top: 5px; margin-bottom: -15px;">&nbsp;&nbsp;&nbsp;</span>
+
+            <button ng-if="!isSimpleDisplay" class="btn btn-link pull-left" style="padding-bottom: 0px; margin-top: 5px; margin-bottom: 0px;" ng-click="exportRawData()">
+                <span class="fa fa-cloud-download"></span> Export Full Network
+            </button>
+            <button ng-if="!isSimpleDisplay" class="btn btn-link pull-left" style="padding-bottom: 0px; margin-top: 5px; margin-bottom: 0px;" ng-click="exportImage()">
+                <span class="fa fa-cloud-download"></span> Export image
+
+            </button>
+
+            <div ng-if="!isSimpleDisplay" class="btn-group pull-left" ng-show="info.geneListArray[0] != 'INVALIDGENE'">
+              <button type="button" class="btn btn-link hidden-xs dropdown-toggle" data-toggle="dropdown" style="padding-bottom: 0px; margin-top: 5px; margin-bottom: 0px;" aria-haspopup="true" aria-expanded="false">
+                Locate Query Gene <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li style="cursor: pointer;" ng-repeat="geneNode in info.geneListArray"><a ng-click="focusOnNode(geneNode)">{{geneNode}}</a></li>
+              </ul>
+            </div>
+
+            <button ng-if="!isSimpleDisplay" class="btn btn-link pull-left" style="padding-bottom: 0px; margin-top: 5px; margin-bottom: 0px;"><span class="label label-primary" ng-show="cluster.filterMessage.length > 0">
+                {{cluster.filterMessage}}
+            </span></button>
+            <span ng-show="!isSimpleDisplay">
+                <button class="btn btn-primary btn-xs pull-right" style="margin-top: 5px; margin-bottom: -10px; margin-right: 1px; background-color: #548AC7; border-color: #e3e3e3; color: white;" ng-click="showgraphSidebar = !showgraphSidebar; re_fit()" ng-show="!showgraphSidebar">LEGEND</button>
+                <button class="btn btn-primary btn-xs pull-right" style="margin-top: 5px; margin-bottom: -10px; margin-right: 1px;" ng-click="showgraphSidebar = !showgraphSidebar; re_fit()">
+                    <span class="fa fa-angle-double-left fa-lg" ng-show="!showgraphSidebar"></span>
+                    <span class="fa fa-angle-double-right fa-lg" ng-show="showgraphSidebar"></span>
+                </button>
+            </span>
+            <!--{{heatOverlapNodes}} xyz {{info.searchTerms}}-->
+
+            <div id="heatmapIsLoading" style="width: 200px; margin-left: 50px;"></div>
+            <div id="heatmap" class="myHeight" style="width: 100%; margin-top: 0px; margin-left: 10px; margin-top: 0px;"></div>
+        </div>
+
+        <div class="sidebar" ng-show="showgraphSidebar" ng-init="show_notes = false;">
+            <div style="width: 300px; margin-top: 5px;" class="pull-right">
+                <div class="list-group" ng-init="showIt = false; showShapes = false; showColorOpts = false;">
+                    <a class="list-group-item active" style="padding-top: 5px; padding-bottom: 5px;">
+                        <h5 style="margin-left: 90px; margin-top: 5px; margin-bottom: 0px; display: inline;">Legend</h5>&nbsp;&nbsp;&nbsp;
+                        <button ng-show="rangeOutput.expression > 0 || rangeOutput.edgeWeight > 0 || rangeOutput.localcc || info.annotationChecked != 'NONE'" style="margin-top: -8px;" class="btn btn-primary btn-xs" ng-click="clearLegendHighlight()"><span class="fa fa-times"></span></button>
+                    </a>
+
+                        <nav style="margin-top: 15px;">
+                            <ul class="nav nav-justified" id="navPillsAlt" style="width: 296px; margin-left: 2px; margin-right: 2px;">
+                              <li role="presentation"><a class="tr808" ng-class="info.isNode ? 'tab-button-active-alt': 'tab-button-inactive-alt'" style="cursor: pointer;" ng-click="info.isNode = true;">Nodes</a></li>
+                              <li role="presentation"><a class="tr808" ng-class="!info.isNode ? 'tab-button-active-alt': 'tab-button-inactive-alt'" style="cursor: pointer;" ng-click="info.isNode = false;">Edges</a></li>
+                              <!--<li role="presentation"><a class="tr808 tab-button-inactive-alt" style="cursor: pointer;" ng-click="info.isNode = true;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>-->
+                            </ul>
+                        <nav>
+                        <!--<div class="checkbox checkbox-warning" style="margin: 0px 0px 0px 0px; white-space: nowrap;">
+                            <input id="showShapesCb" type="checkbox" ng-click="showShapes = !showShapes;">
+                            <label for="showShapesCb" style="width: auto;">
+                                Show shapes
+                            </label>
+                        </div>
+                        <div class="checkbox checkbox-warning" style="margin: 0px 0px 0px 0px; white-space: nowrap;">
+                            <input id="showColorOptsCb" type="checkbox" ng-click="showColorOpts = !showColorOpts;">
+                            <label for="showColorOptsCb" style="width: auto;">
+                                Show color options
+                            </label>
+                        </div>-->
+
+                    <span class="list-group-item" style="padding-right: 5px;" ng-if="info.nodeValueType == 'EXPRESSION' && info.isNode">
+                        <continuous-legend-slider left-color="#00FFFF" right-color="#FF00FF" range-min="0.0" range-max="1.0" range-step="0.01"
+                        range-title="Average Expression" range-output="rangeOutput.expression" re-order-layout="reorderNodes()"></continuous-legend-slider>
+                    </span>
+                    <span class="list-group-item" style="padding-right: 5px;" ng-if="info.nodeValueType == 'LOCALCC' && info.isNode">
+                        <continuous-legend-slider left-color="#00FFFF" right-color="#FF00FF" range-min="0.0" range-max="1.0" range-step="0.01"
+                        range-title="Clustering value" range-output="rangeOutput.localcc" re-order-layout="reorderNodes()"></continuous-legend-slider>
+                    </span>
+                    <span class="list-group-item" style="padding-right: 5px;" ng-show="!info.isNode">
+                        <continuous-legend-slider left-color="#5E77E0" middle-color="white" right-color="#EB2B0B" range-min="-1.0" range-max="1.0" range-step="0.005"
+                        range-title="Correlation Strength" range-output="rangeOutput.edgeWeight" re-order-layout="reorderNodes()"></continuous-legend-slider>
+                    </span>
+
+                    <!--<span class="list-group-item" style="padding-right: 5px;" ng-show="info.isNode">{{minRangeSlider}}</span>
+
+                    <span class="list-group-item" style="padding-right: 5px;" ng-show="info.isNode"><rzslider rz-slider-model="minRangeSlider.minValue" rz-slider-high="minRangeSlider.maxValue" rz-slider-options="minRangeSlider.options"></rzslider></span>-->
+
+
+                    <span class="list-group-item" ng-show="info.isNode">
+                        <button class="btn btn-link" ng-click="showMore.shapeDescriptions = !showMore.shapeDescriptions;" style="margin-top: -15px; text-decoration: none;">
+                            <i ng-show="!showMore.shapeDescriptions" class="fa fa-caret-right" aria-hidden="true"></i><i ng-show="showMore.shapeDescriptions" class="fa fa-caret-down" aria-hidden="true"></i>
+                            <span ng-show="!showMore.shapeDescriptions" style="margin-right: -1px;">&nbsp;</span>Shape descriptions
+                        </button>
+                        <legend-descriptions ng-show="showMore.shapeDescriptions"></legend-descriptions>
+                    </span>
+
+
+                    <!--<span class="list-group-item" ng-show="info.isNode">
+                        <button class="btn btn-link" ng-click="reorderNodes();" style="margin-top: -15px; text-decoration: none;">
+                            <i class="fa fa-refresh" aria-hidden="true"></i>
+                        </button>
+
+                    </span>-->
+
+
+                    <span class="list-group-item" ng-show="info.isNode">
+                        <button class="btn btn-link" ng-click="showMore.annotations = !showMore.annotations;" style="margin-top: -15px; text-decoration: none;">
+                            <i ng-show="!showMore.annotations" class="fa fa-caret-right" aria-hidden="true"></i><i ng-show="showMore.annotations" class="fa fa-caret-down" aria-hidden="true"></i>
+                            <span ng-show="!showMore.annotations" style="margin-right: -1px;">&nbsp;</span>Annotations
+                        </button>
+                        <annotations-circle annotations="info.annotations" annotation-checked="info.annotationChecked" get-genes-from-goid="getAnnotationGenes(goid)" ng-show="showMore.annotations"></annotations-circle>
+                    </span>
+                    <span class="list-group-item" ng-show="info.isNode">
+                        <button class="btn btn-link" ng-click="showMore.colors = !showMore.colors;" style="margin-top: -15px; text-decoration: none;">
+                            <i ng-show="!showMore.colors" class="fa fa-caret-right" aria-hidden="true"></i><i ng-show="showMore.colors" class="fa fa-caret-down" aria-hidden="true"></i>
+                            <span ng-show="!showMore.colors" style="margin-right: -1px;">&nbsp;</span>Colors
+                        </button>
+                        <div class="btn-group" style="margin: 10px 10px 10px 18px;" data-toggle="buttons" ng-show="showMore.colors">
+                          <label class="btn btn-primary active" ng-click="switchNodeColor('EXPRESSION');">
+                            <input type="radio" name="options" id="option1" autocomplete="off" checked> Expression
+                          </label>
+                          <label class="btn btn-primary" ng-click="switchNodeColor('LOCALCC');">
+                            <input type="radio" name="options" id="option2" autocomplete="off"> Cluster facet
+                          </label>
+                        </div>
+
+                    </span>
+                </div>
+            </div>
+            <button class="btn btn-primary btn-xs pull-right" style=" width: 20px; margin-top: 5px; margin-bottom: 5px; margin-right: 1px;" ng-click="showgraphSidebar = !showgraphSidebar; re_fit()">
+                <span class="fa fa-angle-double-right fa-lg"></span>
+            </button>
+
+            <!--<div id="legendVis" style="width: 360px; margin-top: 0px; margin-left: 0px; margin-top: 0px;"></div>-->
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>

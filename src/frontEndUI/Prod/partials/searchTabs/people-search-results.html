@@ -1,0 +1,174 @@
+<style>
+    .filterSection {
+      border-bottom: 1px solid #e2e2e2;
+      padding: 9px 0 0 0;
+      margin-left: 40px;
+    }
+
+    .filterSectionHead {
+        margin-top: 0;
+        color: #444;
+        margin-bottom: 9px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    @media (min-width: 769px) {
+        .flexContainer {
+          display: -webkit-flex;
+          display: flex;
+        }
+        flexNav {
+          width: 320px;
+        }
+        .flex-column {
+          -webkit-flex: 1;
+                  flex: 1;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .flexContainer {
+        }
+        flexNav {
+          display: none;
+        }
+        .flex-column {
+            margin-left: 30px;
+        }
+    }
+
+</style>
+<div class="row">
+
+    <div class="flexContainer">
+        <!--
+        =================
+        == FILTER LIST ==
+        =================
+        -->
+        <!--
+        =================
+        == FILTER LIST ==
+        =================
+        -->
+        <flexNav>
+          <div class="filterSectionBody" style="height: " + {{searchPaneHeight}} + "; overflow-y: auto; overflow-x: hidden; border-top: 1px solid #e2e2e2;">
+              <div class="filterSection">
+                <div class="filterSectionHead">
+                  <span class="filterSectionName">Genes targeted &nbsp;
+                      <button class="btn btn-link clearFilter" style="padding-top: 0px; padding-bottom: 0px; border: 0px solid white;"
+                      ng-show="showMore.authorGeneFilter.length != showMore.permaAuthorGeneFilter.length"
+                      ng-click="showMoreResults.drug_limit_direct_hits = 5; authorGeneFilterClear('')"><span class="fa fa-times"></span> <span style="font-size: 9pt; font-weight: normal; cursor: pointer;">clear</span></button>
+                </div>
+                <div class="filterSectionBody">
+<!--
+                  <div ng-repeat="searchResultsGroup in searchResultsWithGroups| filter: geneTabFilter">
+                    <div class="checkbox checkbox-warning" ng-repeat="hit in searchResultsGroup.overlap_counts | orderBy: 'gene'" style="margin-left: 5px; white-space: nowrap;">
+                        <input id="{{hit.gene}}" type="checkbox" ng-click="showMoreResults.drug_limit_direct_hits = 1000; setAuthorGeneFilter(hit.gene)">
+                        <label for="{{hit.gene}}" style="width: auto;">
+                            {{hit.gene | cut:true:28:' ...'}} ({{hit.count}})
+                        </label>
+                    </div>
+                  </div>
+-->
+                      <div class="checkbox checkbox-warning" ng-repeat="key in showMore.permaAuthorGeneFilter | orderBy: 'toString()'" style="margin-left: 5px; white-space: nowrap;">
+                        <input id="PX{{$index}}" type="checkbox" ng-click="showMoreResults.drug_limit_direct_hits = 1000; setAuthorGeneFilter(key)">
+                        <label for="PX{{$index}}" style="width: auto;">
+                            {{key | cut:true:28:' ...'}}
+                        </label>
+                    </div>
+                    <!--<div class="checkbox checkbox-warning" ng-repeat="(key, value) in searchResultsGroup.geneSuperList | orderBy: key" style="margin-left: 5px; white-space: nowrap;">
+                        <input id="PX{{$index}}V" type="checkbox" ng-click="showMoreResults.drug_limit_direct_hits = 1000; setAuthorGeneFilter(key)">
+                        <label for="PX{{$index}}V" style="width: auto;">
+                            {{key | cut:true:28:' ...'}} ({{value}})
+                        </label>
+                    </div>
+                -->
+
+                </div>
+              </div>
+          </div>
+        </flexNav>
+        <div class="flex-column" style="overflow-x: hidden;">
+            <!--
+            ====================
+            == SEARCH RESULTS ==
+            ====================
+            -->
+
+            <div class="row" ng-repeat="searchResultsGroup in searchResultsWithGroups| filter: geneTabFilter" ng-if="currentTab == 'PEOPLE_GENE'">
+              <div class="col-sm-12" ng-if="resultsPresent">
+                  <div class="slide-content" style="line-height: 10px;">
+                     <div ng-repeat="hit in searchResultsGroup.items | filter:authorGeneFilter | orderBy:'luceneScore':true">
+
+
+                       <div ng-show="(hit.emphasizeInfoArray | filter:searchText).length">
+
+                        <div class="slide-content">
+                            <div class="col-xs-12 col-sm-12 excerpet">
+                              <h4 style="cursor: pointer;">
+                                    <a href="#/people-search-results" data-toggle="modal" data-target="#myModal" ng-click="setIFrameContent('information.html?termId=' + hit.searchResultTitle
+                                    + '&currentTab=PEOPLE_GENE&author=' + hit.searchResultTitle + '&genes=' +  hit.genes_overlap+ '&ElasticId=' +  hit.hit_id)">
+                                      {{hit.searchResultTitle}}
+                                    </a>
+                              </h4>
+                                <p>
+                                    <span style="font-weight: bold;">Data source:</span> {{hit.searchResultSummary}}&nbsp;&nbsp;&nbsp;
+<!--
+                                    <a href="#/people-search-results" data-toggle="modal" data-target="#myModal" ng-click="setIFrameContent('http://geneli.st:8181/Prototype2/partials/D3_information.html?geneList=' + terms_list
+                                    + '&termId=' + hit.searchResultTitle + '&networkTitle=' + hit.searchResultTitle)">
+                                        BP Network
+                                    </a>
+-->
+                                </p>
+
+                                <p>
+                                    <span style="font-weight: bold;">Search Score:</span> <input type="hidden" class="rating" value="{{hit.searchResultScoreRank}}" data-start="0" data-stop="10" data-fractions="5" data-filled="symbolx symbolx-filled" data-empty="symbolx symbolx-empty" data-readonly/>
+                                </p>
+
+                                <p>
+                                    <span role="presentation"><span style="font-weight: bold;">Publication Score:</span> {{hit.luceneScore| number:4}}</span> &nbsp;&nbsp;|&nbsp;&nbsp;
+                                    <span role="presentation"><span style="font-weight: bold;">Query Genes in Node List </span>{{hit.emphasizeInfoArray.length}}</span>
+                                </p>
+
+                                <p style="margin-top: -5px;">
+                                  <div class="btn-group" style=" margin-bottom: 20px;">
+                                      <button ng-repeat="enphasizeThis in hit.emphasizeInfoArray"
+                                       ng-click="setIFrameContent('information.html?termId=' + enphasizeThis.gene + '&currentTab=GENE&snps=')"
+                                        data-toggle="modal" data-target="#myModal"
+                                              class="btn btn-default btn-xs" type="button">{{enphasizeThis.gene}} ({{enphasizeThis.publication_counts}})</button>
+                                  </div>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+
+              </div>
+
+              <p>&nbsp;</p>
+              <nav ng-if="showMore.filterAuthorState === 'PAGED'">
+                <ul class="pagination pagination-lg" style="margin-left: 20px;">
+                  <li ng-show="showMoreResults.pagingAuthorPage != '1'">
+                      <a ng-click="peopleGeneTabClickPaged(showMoreResults.pagingAuthorPage - 1); showMoreResults.pagingAuthorPage = showMoreResults.pagingAuthorPage - 1;" style="cursor: pointer;" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                  </li>
+                  <li ng-class="showMoreResults.pagingAuthorPage === 1 ? 'active': ''"><a ng-click="showMoreResults.pagingAuthorPage = 1; peopleGeneTabClickPaged(1);" style="cursor: pointer;">1</a></li>
+                  <li ng-class="showMoreResults.pagingAuthorPage === 2 ? 'active': ''"><a ng-click="showMoreResults.pagingAuthorPage = 2; peopleGeneTabClickPaged(2);" style="cursor: pointer;">2</a></li>
+                  <li ng-class="showMoreResults.pagingAuthorPage === 3 ? 'active': ''"><a ng-click="showMoreResults.pagingAuthorPage = 3; peopleGeneTabClickPaged(3);" style="cursor: pointer;">3</a></li>
+                  <li ng-class="showMoreResults.pagingAuthorPage === 4 ? 'active': ''"><a ng-click="showMoreResults.pagingAuthorPage = 4; peopleGeneTabClickPaged(4);" style="cursor: pointer;">4</a></li>
+                  <li ng-show="showMoreResults.pagingAuthorPage != '4'">
+                      <a ng-click="peopleGeneTabClickPaged(showMoreResults.pagingAuthorPage + 1); showMoreResults.pagingAuthorPage = showMoreResults.pagingAuthorPage + 1;" style="cursor: pointer;" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+                  </li>
+                </ul>
+              </nav>
+
+
+              </div>
+          </div>
+
+
+
+        </div>
+    </div>
+</div>

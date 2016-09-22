@@ -1,0 +1,88 @@
+.panel {
+	border-radius: 0px;
+}
+.panel-default > .panel-heading {
+  background-color: #5EA07F;
+	color: white;
+	border-color:#ddd;
+	border-radius: 0px;
+}
+.panel-info > .panel-heading {
+  background-color: #1D6285;
+	color: white;
+	border-color:#ddd;
+	border-radius: 0px;
+}
+.panel-primary > .panel-heading {
+  background-color: #716F84;
+	color: white;
+	border-color:#ddd;
+	border-radius: 0px;
+}
+.panel-info {
+	border-color:#ddd;
+}
+.panel-primary {
+	border-color:#ddd;/**/
+}
+
+.panel-green > .panel-heading {
+  background-color: #6898D0;
+	color: white;
+	border-color:#ddd;
+	border-radius: 0px;
+}
+.panel-green {
+	border-color:#ddd;
+}
+
+.categories{background:#FFF padding:0}
+.categories h1{color:#0C0C0C;font-size:45px;font-weight:700;line-height:normal;margin:38px 0 0}
+.categories h2{color:#0C0C0C;font-size:24px;font-weight:300;line-height:normal;margin:0 0 47px}
+.container_16{position:relative;}
+.categories .flipper{float:left;border:0}
+.categories .block .title{
+	opacity:1.0;
+	color: white;
+	padding: 10px;
+}
+.categories .info_tiles{list-style-type: none;}
+.categories .block .icon{display:block;position:relative;background:url(../../images/home/nmhp_blocks.png) no-repeat;height:74px;top:58px;left:50%;-webkit-transform:translateX(-50%);-ms-transform:translateX(-50%);transform:translateX(-50%)}
+.categories .block.army .icon{background-position:-428px 0;width:111px}
+.categories .block.orange .icon{background-position:-347px 0;width:74px}
+.categories .block.teal .icon{background-position:-338px -78px;width:51px}
+.categories .block.plum .icon{background-position:-122px -78px;width:141px}
+.categories .block.purple .icon{background-position:-245px 0;width:96px}
+.categories .block.yellow .icon{background-position:-2px -78px;width:109px}
+.categories .block.green .icon{background-position:0 0;width:170px}
+.categories .block.blue .icon{background-position:-270px -78px;width:63px}
+.categories .block.sky .icon{background-position:0 -179px;width:159px}
+.categories .block.black .icon{background-position:-422px -76px;width:113px;height:60px;top:30px;margin-bottom:40px}
+.categories .block.army>span{background-color:#706D3C}
+.categories .block.orange>span{background-color:#E65527}
+.categories .block.teal>span{background-color:#37A5B3}
+.categories .block.plum>span{background-color:#363948}
+.categories .block.purple>span{background-color:#716F84}
+.categories .block.yellow>span{background-color:#D5BC3A}
+.categories .block.green>span{background-color:#5EA07F}
+.categories .block.blue>span{background-color:#1D6285}
+.categories .block.sky>span{background-color:#86B3BB}
+.categories .block.black{opacity:1;background-color:#000}
+.categories .block.black a{width:100px;margin:6px 0}
+.categories .flipper-front, .categories .flipper-back{opacity:.9}
+/*
+.categories .flipper-back{color:#fff;font-size:21px}
+.categories .flipper-back>span:first-child{margin-top:42px}
+.categories .flipper-back>span{margin-top:10px}
+.categories .flipper-back span{display:block}
+.categories .flipper-back span>span{font-size:14px;text-transform:uppercase;opacity:.5}
+*/
+.categories .block, .categories .flipper-front, .categories .flipper-back{display:inline-block;text-align:left;height:50px;width:440px}
+.categories .flip-container{-webkit-perspective:1000;-moz-perspective:1000;-ms-perspective:1000;perspective:1000;-webkit-transition:.6s;-moz-transition:.6s;-ms-transition:.6s;transition:.6s;position:relative}
+.categories .flip-container:hover .flipper-back{-webkit-transform:rotateY(0deg);-moz-transform:rotateY(0deg);-ms-transform:rotateY(0deg);transform:rotateY(0deg)}
+.categories .flip-container:hover .flipper-front{-webkit-transform:rotateY(180deg);-moz-transform:rotateY(180deg);-ms-transform:rotateY(180deg);transform:rotateY(180deg)}
+.categories .flipper-front, .categories .flipper-back{-webkit-backface-visibility:hidden;-webkit-transition:.6s;-moz-backface-visibility:hidden;-moz-transition:.6s;-ms-backface-visibility:hidden;-ms-transition:.6s;backface-visibility:hidden;transition:.6s;position:absolute;left:0}
+.categories .flipper-front{z-index:2;-webkit-transform:rotateY(0deg);-moz-transform:rotateY(0deg);-ms-transform:rotateY(0deg);transform:rotateY(0deg);background-color:#fff}
+.categories .flipper-back{-webkit-transform:rotateY(-180deg);-moz-transform:rotateY(-180deg);-ms-transform:rotateY(-180deg);transform:rotateY(-180deg);background-color:#ddd}
+.categories p{font-size:13px;text-align:center;margin-top:20px}
+.categories p a{color:#4C3E31}

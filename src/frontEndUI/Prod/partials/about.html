@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <link href="../js/bootstrap-combined.min.css" rel="stylesheet" type="text/css"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+  <link href="../js/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+  <script src="../js/jquery-2.1.1.min.js" type="text/javascript"></script>
+  <script src="../js/elasticUI/angular.js" type="text/javascript"></script>
+  <script src="../js/lodash.min.js" type="text/javascript"></script>
+  <script src="../js/services.js" type="text/javascript"></script>
+  <script src="../js/aboutApp.js" type="text/javascript"></script>
+  <link href="../css/commonstyles.css" rel="stylesheet" type="text/css"/>
+  <link href="../css/sample1.css" rel="stylesheet" type="text/css"/>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+
+
+
+
+  <script src="../js/d3.v3.js" type="text/javascript"></script>
+  <script src="../js/directivesVis.js" type="text/javascript"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.js"></script>
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.11.0/vis.min.js"></script>-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.11.0/vis.min.css"></script>
+
+
+
+
+</head>
+<body ng-app="aboutApp" ng-controller="aboutCtrl">
+  <div>
+      <vis-display cluster-id="2020026243"></vis-display>
+
+
+    <div class="container-fluid">
+<!--
+      <div class="row">
+          <div class="col-sm-12">
+            <h1><small>Top gene searches:</small></h1>
+            <button ng-repeat="topGenes in about.showMore.topGeneSearch | orderBy:'count':true | limitTo:4" class="btn btn-lg btn-watermark" style="margin-left: 5px;">{{topGenes._id}} ({{topGenes.count}})</button>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-sm-12">
+            <h1><small>Peak search times:</small></h1>
+            <div id="timeViz2"></div>
+
+            <br />
+            <br />
+          </div>
+      </div>
+-->
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div style="margin-top: 20px;">
+                    <a href="http://ec2-52-38-59-248.us-west-2.compute.amazonaws.com:3000/#/">Dev</a>
+                </div>
+            </div>
+        </div>
+
+
+      <div class="row">
+          <div class="col-sm-12">
+            <h1><small>Where does the data come from?</small></h1>
+            <button class="btn btn-lg btn-watermark"><i class="fa fa-database fa-2x"></i><br />TCGA</button>
+            <span class="fa fa-plus fa-lg watermark-color"></span>
+            <button class="btn btn-lg btn-watermark"><i class="fa fa-database fa-2x"></i><br />GEO</button>
+            <span class="fa fa-plus fa-lg watermark-color"></span>
+            <button class="btn btn-lg btn-watermark"><i class="fa fa-database fa-2x"></i><br />Genemania</button>
+            <span class="fa fa-plus fa-lg watermark-color"></span>
+            <button class="btn btn-lg btn-watermark"><i class="fa fa-database fa-2x"></i><br />Clinvar</button>
+            <span class="fa fa-plus fa-lg watermark-color"></span>
+            <button class="btn btn-lg btn-watermark"><i class="fa fa-database fa-2x"></i><br />Cosmic</button>
+            <span class="fa fa-plus fa-lg watermark-color"></span>
+            <button class="btn btn-lg btn-watermark"><i class="fa fa-database fa-2x"></i><br />DBSnp</button>
+            <span class="fa fa-plus fa-lg watermark-color"></span>
+            <button class="btn btn-lg btn-watermark"><i class="fa fa-database fa-2x"></i><br />PubMed</button>
+            <br />
+            <br />
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-sm-12">
+            <h1><small>How is the data processed?</small></h1>
+            <button class="btn btn-lg btn-watermark"><i class="fa fa-users fa-2x"></i><br>Our engineers<br />develop algorithms</button>
+            <span class="fa fa-arrow-right fa-lg watermark-color"></span>
+
+            <button class="btn btn-lg btn-watermark"><i class="fa fa-cloud fa-2x"></i> <i class="fa fa-server fa-2x"></i> <i class="fa fa-server fa-2x"></i><br>Which are applied <br />through cloud computing</button>
+            <span class="fa fa-arrow-right fa-lg watermark-color"></span>
+            <button class="btn btn-lg btn-watermark"><i class="fa fa-sort-amount-asc fa-rotate-270 fa-2x"></i><br />Data is indexed</button>
+
+            <span class="fa fa-arrow-right fa-lg watermark-color"></span>
+            <button class="btn btn-lg btn-watermark"><i class="fa fa-database fa-2x"></i><br />Then stored in <br />high-speed data stores</button>
+
+            <br />
+            <br />
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-sm-12">
+            <h1><small>How is the publication score calculated?</small></h1>
+            <button class="btn btn-lg btn-watermark"><i class="fa fa-info-circle fa-2x"></i><br>For all author's publications:<br />&nbsp;&nbsp;&nbsp;&Sigma; impact factor * author position</button>
+            <br />
+            <br />
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-sm-12">
+            <h1><small>Etc... (Place holder)</small></h1>
+            <button class="btn btn-lg btn-watermark"><i class="fa fa-users fa-2x"></i><br>Users</button>
+            <button class="btn btn-lg btn-watermark"><i class="fa fa-paste fa-2x"></i><br />Enter a list<br />of genes</button>
+            <span class="fa fa-long-arrow-right fa-2x watermark-color"></span>
+            <button class="btn btn-lg btn-watermark"><i class="fa fa-database fa-2x"></i><br />ElasticSearch</button>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+</body>
+</html>

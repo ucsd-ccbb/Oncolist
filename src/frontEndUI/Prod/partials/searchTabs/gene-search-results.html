@@ -1,0 +1,91 @@
+                <div class="col-sm-2">
+                  <div class="checkbox checkbox-warning" style="margin-left: 18px; white-space: nowrap;">
+                      <input id="checkbox1" type="checkbox" ng-click="showMore.filterOverlap = !showMore.filterOverlap">
+                      <label for="checkbox1">
+                          Show all results
+                      </label>
+                  </div>
+                </div>
+                <div class="col-sm-10">
+                    <div class="row" ng-repeat="searchResultsGroup in searchResultsWithGroups | filter: geneTabFilter">
+                        <!--
+                        =====================================
+                        =====================================
+                        =====================================
+                        =====================================
+                           MAIN WORK AREA -- SEARCH RESULTS
+                        =====================================
+                        =====================================
+                        =====================================
+                        =====================================
+                        -->
+                        <div class="col-sm-12" ng-if="resultsPresent">
+                            <div ng-repeat="hit in searchResultsGroup.items | orderBy:['queryGenesCount', 'pubmedCount', 'luceneScore']: true | filter: geneOverlapFilter" ng-init="limit = 4">
+                                <div ng-if="hit.searchResultTitle === 'No Results'"><h3>There are no Results</h3></div>
+                                <div  ng-if="hit.searchResultTitle != 'No Results && hit.emphasizeInfoArrayWithWeights.length > 0'" class="slide-content">
+                                    <div class="col-xs-12 col-sm-12 excerpet">
+                                        <h4 style="cursor: pointer;">
+                                          <!--<a href="#/gene-search-results" data-toggle="modal" data-target="#myModal" ng-click="setIFrameContent('http://geneli.st:8181/Prototype2/partials/information.html?termId=' + hit.searchResultTitle + '&currentTab=GENE&snps=' + hit.variants)">-->
+                                          <a href="#/gene-search-results" data-toggle="modal" data-target="#myModal" ng-click="setIFrameContent('information.html?termId=' + hit.searchResultTitle + '&currentTab=GENE&snps=' + hit.variants)">
+                                            {{hit.searchResultTitle}}
+                                          </a>
+                                        </h4>
+                                        <h5>
+                                          Cancer Type:
+                                          <a href="#/gene-search-results" data-toggle="modal" data-target="#myModal" style="cursor: pointer;" ng-click="setExternalIFrameContent('https://en.wikipedia.org/wiki/' + hit.WikipediaDiseaseType)">
+                                            {{hit.diseaseType}}
+                                          </a>
+                                        </h5>
+                                        <div style="margin-top: 0px; margin-bottom: 0px;">
+                                            {{hit.searchResultSummary}}&nbsp;&nbsp;&nbsp;
+                                        </div>
+                                        <p>
+                                          <small> <span role="presentation">Lucene Score <strong>{{hit.luceneScore| number:4}}</strong></span> &nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                                          <span role="presentation">Query Genes in Node List <strong>{{hit.emphasizeInfoArrayWithWeights.length}}</strong></span></small>
+                                        </p>
+                                        <p>
+                                          <div class="btn-group" ng-if="currentTab == 'GENES'" style=" margin-bottom: 0px;">
+                                            <div class="row" ng-if="project.genes_list.length > 0">
+                          		                <div class="col-sm-12">
+
+                                                 <div>
+                                                   <button class="btn btn-link text-muted-dark" ng-show="limit == 4 && hit.emphasizeInfoArrayWithWeights.length > 4" style="padding: 0px 5px 0px 0px;" ng-click="limit = 1000">
+                                                       <span class='fa fa-plus-square-o fa-lg'></span>
+                                                   </button>
+                                                   <button class="btn btn-link text-muted-dark" ng-show="limit > 4 && hit.emphasizeInfoArrayWithWeights.length > 4" style="padding: 0px 5px 0px 0px;" ng-click="limit = 4">
+                                                       <span class='fa fa-minus-square-o fa-lg'></span>
+                                                   </button>
+                                                          <div ng-repeat="enphasizeThis in hit.emphasizeInfoArrayWithWeights | orderBy:'weight':true | limitTo:limit" class="btn-group">
+                                                             <button ng-click='setIFrameContent("information.html?termId=" + enphasizeThis.name + "&currentTab=GENE&snps=")'
+                                                               data-toggle='modal' data-target='#myModal'
+                                                               class='btn btn-default btn-xs' type='button'>{{enphasizeThis.name}} <br />({{enphasizeThis.weight}})</button>
+                                                           {{hitsInternal.diseaseType}}
+                                                         </div><img src='images/buttonFade.png' ng-if='hit.emphasizeInfoArrayWithWeights.length > 4 && limit == 4'></img>
+                                                </div>
+
+
+
+                                                  <!--<more-less-genes hits-directive="{{hit.emphasizeInfoArrayWithWeights}}" show-more-more-less="false">
+                                                  </more-less-genes>-->
+                          		                </div>
+                          		            </div>
+                                        </div>
+                                      </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2" ng-if="resultsPresent">
+                    <p>&nbsp;</p>
+                    <div style="display: none;" ng-if="currentTab != 'CYTOSCAPE'" class="bs-callout bs-callout-info" id="callout-helper-context-color-specificity">
+                        <div class="panel panel-default" style='padding: 15px;'>
+
+                            <h3>Query Genes <br /><small>that appear in the results</small></h3>
+                            <ul class="nav nav-pills  nav-stacked" ng-repeat="searchResultsGroup in searchResultsWithGroups| filter: geneTabFilter">
+                                <li role="presentation" ng-repeat="geneItem in searchResultsGroup.geneSuperList| orderBy:'geneCount':true"><a ng-mouseover="setHoverValue(geneItem.geneId)" href="#">{{geneItem.geneId}} <span class="badge pull-right">{{geneItem.geneCount}}</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>

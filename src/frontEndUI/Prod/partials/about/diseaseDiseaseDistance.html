@@ -1,0 +1,60 @@
+<style>
+
+    /* centered columns styles */
+    .row-centered {
+        text-align:center;
+    }
+    .col-centered {
+    }
+    .dash{
+      border: 0 none;
+      border-top: 2px dashed #979797;
+      background: none;
+      height:0;
+    }
+    .howitworkslink {
+        background-color: #979797;
+    }
+    .iframeHeight {
+        height: 100%;
+        height: -webkit-calc(100% - 140px);
+        height: -moz-calc(100% - 140px);
+        height: calc(100% - 140px);
+    }
+    @media (max-width: 768px) {
+        #mainImg {
+           position: absolute;
+           top: 80px;
+           left: 50%;
+           width: 800px;
+           height: 1800px;
+           margin-left: -400px; /* Half the width */
+           overflow-x: hidden;
+        }
+    }
+    @media (min-width: 769px) {
+        #mainImg {
+           position: absolute;
+           top: 140px;
+           left: 50%;
+           width: 800px;
+           height: 1800px;
+           margin-left: -400px; /* Half the width */
+           overflow-x: hidden;
+        }
+    }
+</style>
+<div class="row row-centered">
+    <iframe src="partials/disease_disease_distance/cluster_characterization.html" class="iframeHeight" style="position: absolute; width: 100%; border: none; top: 140px; left: 0px;"></iframe>
+    <a href="#/multipurpose-genes" style="position: absolute; top: 120px; left: 110px; text-decoration: none;"><i class="fa fa-book" aria-hidden="true"></i> Multipurpose genes notebook</a>
+    <a href="#/disease-disease-mirna" style="position: absolute; top: 120px; left: 330px; text-decoration: none;"><i class="fa fa-book" aria-hidden="true"></i> Disease-Disease distance miRNA notebook</a>
+    <a href="#/" style="position: absolute; top: 120px; left: 35px; text-decoration: none;"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
+
+
+    <!--<div class="col-sm-12 col-centered">
+        <a href="#/main-about" style="text-decoration: none;">
+            <image src="../../images/about/oncolist_authors.png" />
+        </a>
+    </div>
+-->
+</div>

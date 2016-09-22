@@ -1,0 +1,270 @@
+
+<style>
+.filterSection {
+  border-bottom: 1px solid #e2e2e2;
+  padding: 9px 0 0 0;
+  margin-left: 40px;
+  margin-right: 3px;
+}
+
+.filterSectionHead {
+    margin-top: 0;
+    color: #444;
+    margin-bottom: 9px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+@media (min-width: 769px) {
+    .flexContainer {
+      display: -webkit-flex;
+      display: flex;
+    }
+    flexNav {
+      width: 320px;
+    }
+    .flex-column {
+      -webkit-flex: 1;
+              flex: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .flexContainer {
+    }
+    flexNav {
+      display: none;
+    }
+    .flex-column {
+        margin-left: 30px;
+    }
+}
+</style>
+<div class="row" ng-show="searchResultsWithGroups.length > 0">
+
+    <div class="flexContainer">
+        <!--
+        =================
+        == FILTER LIST ==
+        =================
+        -->
+        <flexNav>
+<!--
+            <div class="filterSection">
+              <div class="filterSectionHead">
+                <span class="filterSectionName"></span>
+                    <span style="font-weight: bold;">Conditions</span>
+                    <button class="btn btn-link clearFilter" style="padding-top: 0px; padding-bottom: 0px; border: 0px solid white;"
+                    ng-show="showMore.conditionsFilter.length != showMore.permaConditionsFilter.length"
+                    ng-click="conditionsFilterClear('CX')"><span class="fa fa-times"></span> <span style="font-size: 9pt; font-weight: normal; cursor: pointer;">clear</span></button>
+              </div>
+              <div class="filterSectionBody" ng-show="showMore.filterConditions" style="height: " + {{searchPaneHeight}} + "; overflow-y: auto; overflow-x: hidden; border-top: 1px solid #e2e2e2;">
+                <div ng-repeat="searchResultsGroup in searchResultsWithGroups| filter: geneTabFilter">
+                  <div class="checkbox checkbox-warning" ng-repeat="key in showMore.permaConditionsFilter | orderBy: 'toString()' | limitTo: showMore.filterConditionsLimit" style="margin-left: 5px; white-space: nowrap;">
+
+                      <input id="CX{{$index}}" type="checkbox" ng-click="setConditionsFilter(key)">
+                      <label for="CX{{$index}}" style="width: auto;">
+                          <span>{{key | cut:true:32:' ...'}}</span>
+                      </label>
+                  </div>
+
+                  <div ng-if="showMore.permaConditionsFilter.length > 4;" style="margin-left: 13px; margin-top: -10px; margin-bottom: 15px; white-space: nowrap;">
+                      <label style="width: auto; font-weight: normal;">
+                          <a ng-show="showMore.filterConditionsLimit == 4;" ng-click="showMore.filterConditionsLimit = 1000;" style="margin-top: 0px; padding-left: 2px; cursor: pointer; text-decoration: none;">
+                              <i class="fa fa-caret-right fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;Show more conditions filters
+                          </a>
+                          <a ng-show="showMore.filterConditionsLimit == 1000;" ng-click="showMore.filterConditionsLimit = 4;" style="margin-top: 0px; padding-left: 2px; cursor: pointer; text-decoration: none;">
+                              <i class="fa fa-caret-up fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;Hide conditions filters
+                          </a>
+
+                      </label>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+-->
+            <div class="filterSection">
+              <div class="filterSectionHead">
+                <span class="filterSectionName"></span>
+                    <span style="font-weight: bold;">Tissues</span>
+                    <button class="btn btn-link clearFilter" style="padding-top: 0px; padding-bottom: 0px; border: 0px solid white;"
+                    ng-show="showMore.tissuesFilter.length != showMore.permaTissuesFilter.length"
+                    ng-click="tissuesFilterClear('CTX')"><span class="fa fa-times"></span> <span style="font-size: 9pt; font-weight: normal; cursor: pointer;">clear</span></button>
+              </div>
+              <div class="filterSectionBody" ng-show="showMore.filterConditions" style="height: " + {{searchPaneHeight}} + "; overflow-y: auto; overflow-x: hidden; border-top: 1px solid #e2e2e2;">
+                  <div class="checkbox checkbox-warning" ng-repeat="key in showMore.permaTissuesFilter | orderBy: 'toString()' | limitTo: showMore.filterTissuesLimit" style="margin-left: 5px; white-space: nowrap;">
+                    <input id="CTX{{$index}}" type="checkbox" ng-click="setTissuesFilter(key)">
+                    <label for="CTX{{$index}}" style="width: auto;">
+                        <span>{{key | cut:true:32:' ...'}}</span>
+                    </label>
+
+                </div>
+
+                <div ng-if="showMore.permaTissuesFilter.length > 4;" style="margin-left: 13px; margin-top: -10px; margin-bottom: 15px; white-space: nowrap;">
+                    <label style="width: auto; font-weight: normal;">
+                        <a ng-show="showMore.filterTissuesLimit == 4;" ng-click="showMore.filterTissuesLimit = 1000;" style="margin-top: 0px; padding-left: 2px; cursor: pointer; text-decoration: none;">
+                            <i class="fa fa-caret-right fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;Show more tissue filters
+                        </a>
+                        <a ng-show="showMore.filterTissuesLimit == 1000;" ng-click="showMore.filterTissuesLimit = 4;" style="margin-top: 0px; padding-left: 2px; cursor: pointer; text-decoration: none;">
+                            <i class="fa fa-caret-up fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;Hide tissue filters
+                        </a>
+
+                    </label>
+                </div>
+
+              </div>
+            </div>
+        </flexNav>
+
+
+        <div class="flex-column" style="overflow-x: hidden;">
+            <!--
+            ====================
+            == SEARCH RESULTS ==
+            ====================
+            -->
+            <div class="row" ng-repeat="searchResultsGroup in searchResultsWithGroups | filter: geneTabFilter">
+                <div class="col-sm-12" ng-if="resultsPresent">
+
+<!--
+                  <div ng-repeat="hit in searchResultsGroup.simple_disease_tissue_group | filter: conditionsFilter | orderBy:['grouped_by_conditions_count']:true" ng-init="limit_gene = 6">
+                      <div class="slide-content" style="line-height: 10px;">
+                          <div ng-init="limit = 3">
+                            <div style="background-color: whitesmoke; padding-top: 8px; padding-bottom: 5px; padding-left: 4px; border-bottom: 1px solid #C0C0C0; overflow-x: hidden;">
+                            <span style="line-height: 18px; font-size: 16px; margin-top: 8px; margin-left: 4px;">
+                                    <span><a style="color: #707070;" href="https://en.wikipedia.org/wiki/{{hit.group_condition_type_key}}" target="_blank">{{hit.disease}}  ({{hit.grouped_by_conditions_count}})</a></span>
+                            </span>
+                            </div>
+                            <div class="esc-separator" style="opacity: 1; background-color: rgb(214, 214, 214);"></div>
+
+                            <div ng-repeat="group_hit in hit.tissues | orderBy:'genes.length':true | limitTo:limit" class="row"  style="margin-left: 25px;">
+
+                              <h5>
+                                  <condition-links ng-if="group_hit.clinvar_genes.length > 0" ctype="'CLINVAR'" tissue="group_hit.group_tissue_type" result="group_hit" linkids="group_hit.resources"></condition-links>
+                                  <a ng-if="group_hit.genes.length > 0"
+                                      ng-click="setIFrameContent('information.html?termId=INVALIDGENE&currentTab=CONDITION&pubmedIds=' + group_hit.pubmed_ids + '&title=' + group_hit.tissue + '&cosmicIds=' + group_hit.cosmic_ids + '&snps=')"
+                                    data-toggle="modal" data-target="#myModal" type="button" style="cursor: pointer;">{{group_hit.tissue | capitalize}}</a>
+                              </h5>
+
+                                <p ng-if="hit.data_source === 'COSMIC'">
+                                    <span style="font-weight: bold;">Data source:</span> Cosmic &nbsp;&nbsp;&nbsp;
+                                </p>
+                                <div class="btn-group" ng-if="group_hit.genes.length > 0">
+                                    <button ng-click="limit_gene = 1000" class="btn btn-link text-muted-dark" type="button" ng-show="limit_gene != 1000 && group_hit.genes.length > 6" style="padding: 0px 5px 0px 0px; margin-left: -1px; cursor: pointer;">
+                                        <span class='fa fa-plus-square-o fa-lg'></span></button>
+                                    <button ng-click="limit_gene = 6" class="btn btn-link text-muted-dark" type="button" ng-show="limit_gene == 1000 && group_hit.genes.length > 6" style="padding: 0px 5px 0px 0px;cursor: pointer;">
+                                        <span class='fa fa-minus-square-o fa-lg'></span></button>
+
+                                    <button ng-repeat="group_item in group_hit.genes | limitTo:limit_gene"
+                                     ng-click="setIFrameContent('information.html?termId=' + group_item + '&currentTab=CONDITION_GENE&condition=' + hit.disease + '&tissue=' + group_hit.tissue + '&snp=')"
+                                      data-toggle="modal" data-target="#myModal"
+                                            class="btn btn-default btn-xs" type="button">{{group_item}}</button>
+                                    <img src="images/buttonFadeSmall.png" style="margin-left: 0px;" ng-if="limit_gene == 6 &&  group_hit.genes.length > 6"></img>
+                                </div>
+                                <p ng-if="group_hit.clinvar_genes.length > 0">
+                                    <span style="font-weight: bold;">Data source:</span> Clinvar &nbsp;&nbsp;&nbsp;
+                                </p>
+                                <div class="btn-group" ng-if="group_hit.clinvar_genes.length > 0">
+                                    <button ng-click="limit_gene = 1000" class="btn btn-link text-muted-dark" type="button" ng-show="limit_gene != 1000 && group_hit.clinvar_genes.length > 4" style="padding: 0px 5px 0px 0px;border: 0px solid white;cursor: pointer;">
+                                        <span class='fa fa-plus-square-o fa-lg'></span></button>
+                                    <button ng-click="limit_gene = 6" class="btn btn-link text-muted-dark" type="button" ng-show="limit_gene == 1000 && group_hit.clinvar_genes.length > 4" style="padding: 0px 5px 0px 0px;border: 0px solid white;cursor: pointer;">
+                                        <span class='fa fa-minus-square-o fa-lg'></span></button>
+
+                                    <button ng-repeat="gene_name in group_hit.clinvar_genes | limitTo:limit_gene"
+                                     ng-click="setIFrameContent('information.html?termId=' + gene_name + '&currentTab=CONDITION_GENE&snps=')"
+                                      data-toggle="modal" data-target="#myModal"
+                                            class="btn btn-default btn-xs" type="button">{{gene_name}}</button>
+                                    <img src="images/buttonFadeSmall.png" style="margin-left: 0px;" ng-if="limit_gene == 6 &&  group_hit.clinvar_genes.length > 6"></img>
+                                </div>
+                                <p>&nbsp;</p>
+                            </div>
+
+                            <a ng-click="limit = 1000" class="pull-left" ng-show="limit != 1000 && hit.grouped_by_conditions_count > 3" style="cursor: pointer; display: block; margin-left: 5px; margin-top: -25px; margin-bottom: 10px;"><span class='fa fa-angle-double-down fa-lg'></span></a>
+                            <a ng-click="limit = 3" class="pull-left" ng-show="limit == 1000 && hit.grouped_by_conditions_count > 3" style="cursor: pointer; display: block; margin-left: 5px; margin-top: -25px; margin-bottom: 10px;"><span class='fa fa-angle-double-up fa-lg'></span></a>
+
+                          </div>
+                      </div>
+                  </div>
+
+                  <p>&nbsp;</p>
+-->
+
+                  <div class="container-fluid">
+                      <div class="modal fade" id="myConditionsModal" tabindex="-1" role="dialog" aria-labelledby="myConditionsModalLabel" style="overflow-x: hidden; padding: 5px 5px 0px 5px;">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <!--<button type="button" class="btn btn-default pull-right" style="margin-top: -5px; margin-right: 4px;" data-dismiss="modal">Close</button>-->
+                              <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                              <a onclick="confirmClick();" class="pull-left" style="text-decoration: none; cursor: pointer; margin-right: 5px; margin-top: 3px;"><i class="fa fa-arrow-circle-o-left fa-lg"></i> Back</a>
+                              <a data-dismiss="modal" class="small-screen pull-right" style="cursor: pointer;" ng-click="show_cond_directive=false;"><span class="fa fa-times fa-lg" style="margin: 8px;"></span></a>
+                              <a data-dismiss="modal" class="pull-right hidden-xs" style="cursor: pointer;" ng-click="show_cond_directive=false;"><span class="fa fa-times fa-lg" style="margin: 8px;"></span></a>
+                              <h4 class="modal-title" id="myConditionsModalLabel"> &nbsp;&nbsp;&nbsp;{{info.selectedConditionTissue}} {{info.selectedConditionDisease}}</h4>
+                            </div>
+                            <div class="modal-body" style="padding: 2px; overflow-x: hidden; height: 600px;" id="conditionsModalBody">
+                                <condition-info condition-data="info.selectedConditionData"></condition-info>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  </div><!-- END Modal -->
+
+                  <div ng-repeat="tissueGroup in searchResultsGroup.basic_grouped_search_results.hits | orderBy: ['disease_count', 'top_gene_overlap']:true | filter: tissuesFilter" ng-init="limit_gene = 6;">
+                      <div style="background-color: whitesmoke; padding-top: 8px; padding-bottom: 5px; padding-left: 4px; border-bottom: 1px solid #C0C0C0; overflow-x: hidden;">
+                          <span><a style="color: #707070;" href="https://en.wikipedia.org/wiki/{{tissueGroup.tissue}}" target="_blank">{{tissueGroup.tissue | capitalize}} ({{tissueGroup.disease_count}})</a></span>
+
+
+                      </div>
+                      <div class="esc-separator" style="opacity: 1; background-color: rgb(214, 214, 214);"></div>
+                      <div ng-repeat="disease in tissueGroup.disease_group.diseases | orderBy: ['disease_content.genes.length']:true" class="row" style="margin-left: 25px;" ng-init="show_cond_directive=false;">
+
+                            <h5 style="cursor: pointer;">
+                                <a style="cursor: pointer;" ng-click="setConditionInfoModal(); info.selectedConditionData = disease.disease_content; info.selectedConditionDisease = disease.disease_desc; info.selectedConditionTissue = tissueGroup.tissue; show_cond_directive=!show_cond_directive;" data-toggle="modal" data-target="#myConditionsModal">
+                                    {{disease.disease_desc | capitalize}}
+                                </a>
+                            </h5>
+                            <p>
+                                <span style="font-weight: bold;">Data source:</span> Cosmic &nbsp;&nbsp;&nbsp;
+                            </p>
+
+                            <div class="btn-group" ng-if="disease.disease_content.genes.length > 0">
+                                <button ng-click="limit_gene = 1000" class="btn btn-link text-muted-dark" type="button" ng-show="limit_gene != 1000 && disease.disease_content.genes.length > 6" style="padding: 0px 5px 0px 0px; margin-left: -1px; cursor: pointer;">
+                                    <span class='fa fa-plus-square-o fa-lg'></span></button>
+                                <button ng-click="limit_gene = 6" class="btn btn-link text-muted-dark" type="button" ng-show="limit_gene == 1000 && disease.disease_content.genes.length > 6" style="padding: 0px 5px 0px 0px;cursor: pointer;">
+                                    <span class='fa fa-minus-square-o fa-lg'></span></button>
+                                <button ng-repeat="gene_item in disease.disease_content.genes | orderBy: 'toString()'"
+                                 ng-click="setIFrameContent('information.html?termId=' + gene_item + '&currentTab=CONDITION_GENE&condition=' + disease.disease_desc + '&tissue=' + tissueGroup.tissue + '&snp=')"
+                                  data-toggle="modal" data-target="#myModal" class="btn btn-default btn-xs" type="button">{{gene_item}}</button>
+
+                                <img src="images/buttonFadeSmall.png" style="margin-left: 0px;" ng-if="limit_gene == 6 &&  disease.disease_content.genes.length > 6"></img>
+                            </div>
+                            <p>&nbsp;</p>
+
+                    </div>
+                  </div>
+
+                  <nav ng-if="showMore.filterConditionState === 'PAGED'">
+                  <nav>
+                    <ul class="pagination pagination-lg" style="margin-left: 20px;">
+                        <li ng-show="showMoreResults.pagingConditionPage != '1'">
+                            <a ng-click="phenotypeClickPaged(showMoreResults.pagingConditionPage - 1); showMoreResults.pagingConditionPage = showMoreResults.pagingConditionPage - 1;" style="cursor: pointer;" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                        </li>
+                      <li ng-class="showMoreResults.pagingConditionPage === 1 ? 'active': ''"><a ng-click="showMoreResults.pagingConditionPage = 1; phenotypeClickPaged(1);" style="cursor: pointer;">1</a></li>
+                      <li ng-class="showMoreResults.pagingConditionPage === 2 ? 'active': ''"><a ng-click="showMoreResults.pagingConditionPage = 2; phenotypeClickPaged(2);" style="cursor: pointer;">2</a></li>
+                      <li ng-class="showMoreResults.pagingConditionPage === 3 ? 'active': ''"><a ng-click="showMoreResults.pagingConditionPage = 3; phenotypeClickPaged(3);" style="cursor: pointer;">3</a></li>
+                      <li ng-class="showMoreResults.pagingConditionPage === 4 ? 'active': ''"><a ng-click="showMoreResults.pagingConditionPage = 4; phenotypeClickPaged(4);" style="cursor: pointer;">4</a></li>
+                      <li ng-show="showMoreResults.pagingConditionPage != '4'">
+                          <a ng-click="phenotypeClickPaged(showMoreResults.pagingConditionPage + 1); showMoreResults.pagingConditionPage = showMoreResults.pagingConditionPage + 1;" style="cursor: pointer;" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+                      </li>
+                    </ul>
+                  </nav>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+
+  .node {
+    cursor: pointer;
+    stroke: #3182bd;
+    stroke-width: 0.5px;
+  }
+
+  .node text {
+    font: 5px helvetica;
+  }
+
+
+
+  .link {
+    fill: none;
+    stroke: #9ecae1;
+    stroke-width: 0.5px;
+    opacity:.5
+
+  }
+
+  .scrollable-menu {
+      height: auto;
+      max-height: 200px;
+      overflow-x: hidden;
+  }
+
+  @media (min-width: 769px) {
+      .navbar-xs { min-height:28px; height: 28px; }
+      .navbar-xs .navbar-brand{ padding: 0px 12px;font-size: 16px;line-height: 28px; }
+      .navbar-xs .navbar-nav > li > a {  padding-top: 0px; padding-bottom: 0px; line-height: 28px; }
+  }
+  @media (max-width: 768px) {
+      .navbar-xs { min-height:40px; height: 40px; }
+      .navbar-xs .navbar-brand{ padding: 0px 12px;font-size: 16px;line-height: 40px; }
+      .navbar-xs .navbar-nav > li > a {  padding-top: 0px; padding-bottom: 0px; line-height: 40px; }
+  }
+  btn-link:hover {
+      text-decoration: none;
+  }
+
+  .col-xs-12-custom, .col-xs-9-custom, .col-xs-3-custom {
+    position: relative;
+    min-height: 1px;
+    padding-right: 2px;
+    padding-left: 2px;
+  }
+  .col-xs-12-custom, .col-xs-9-custom, .col-xs-3-custom {
+    float: left;
+  }
+  .col-xs-12-custom {
+    width: 100%;
+  }
+  .col-xs-9-custom {
+    width: 75%;
+  }
+  .col-xs-3-custom {
+    width: 25%;
+  }
+
+</style>
+</head>
+<!--<body ng-app="myApp" ng-controller="myCtrl" ng-init="init_page()">-->
+<body ng-app="myApp" ng-controller="myCtrl" ng-init="init_page()">
+  <div>
+    <div class="container-fluid" style="padding: 0px; margin: 0px;">
+
+      <div class="row" style="width: 100%;" ng-init="showgraphSidebar = false">
+        <div ng-class="showgraphSidebar ? 'col-xs-9-custom' : 'col-xs-12-custom'" id="myClusterModalBody">
+            <span class="pull-left hidden-xs" style="padding-bottom: 0px; margin-top: 5px; margin-bottom: -15px;">&nbsp;&nbsp;&nbsp;</span>
+            <button class="btn btn-link pull-left" style="padding-bottom: 0px; margin-top: 5px; margin-bottom: -5px;" ng-click="toggleNodeSize()">
+            <span ng-show="info.nodeSizeToggleState"><span class="fa fa-dot-circle-o"></span> Default size</span><span ng-show="!info.nodeSizeToggleState"><span class="fa fa-dot-circle-o"></span> Weighted size</span>
+            </button>
+            <button class="btn btn-link pull-left hidden-xs" style="padding-bottom: 0px; margin-top: 5px; margin-bottom: -15px;" ng-show="showMore.origin != 'newWindow'" ng-click="openInNewWindow()"><span class="fa fa-sign-out fa-rotate-270"></span> Open</button>
+            <button class="btn btn-link pull-left hidden-xs" style="padding-bottom: 0px; margin-top: 5px; margin-bottom: -15px;" ng-click="saveNetworkImage()"><span class="fa fa-image"></span> Create image</button>
+            <button class="btn btn-link pull-left hidden-xs" style="padding-bottom: 0px; margin-top: 5px; margin-bottom: -15px;" ng-click="exportData()"><span class="fa fa-file-pdf-o"></span> Export</button>
+            <button class="btn btn-primary btn-xs pull-right" style="margin-top: 5px; margin-bottom: -15px; margin-right: 1px; background-color: #f5f5f5; border-color: #e3e3e3; color: black;" ng-show="!showgraphSidebar">LEGEND</button>
+            <button class="btn btn-primary btn-xs pull-right" style="margin-top: 5px; margin-bottom: -15px; margin-right: 1px;" ng-click="showgraphSidebar = !showgraphSidebar; re_fit()">
+                <span class="fa fa-angle-double-left fa-lg" ng-show="!showgraphSidebar"></span>
+                <span class="fa fa-angle-double-right fa-lg" ng-show="showgraphSidebar"></span>
+            </button>
+
+            <!--<button class="btn btn-link pull-left visible-xs" style="padding-bottom: 0px; margin-top: 5px; margin-bottom: -5px;" ng-show="showMore.origin != 'newWindow'" ng-click="openInNewWindow()"><span class="fa fa-sign-out fa-rotate-270"></span> Open</button>
+            <button class="btn btn-link pull-left visible-xs" style="padding-bottom: 0px; margin-top: 5px; margin-bottom: -5px;" ng-click="saveNetworkImage()"><span class="fa fa-image"></span> Create img</button>
+            <button class="btn btn-link pull-left visible-xs" style="padding-bottom: 0px; margin-top: 5px; margin-bottom: -5px;" ng-click="exportData()"><span class="fa fa-file-pdf-o"></span> Export</button>
+        -->
+
+            <div id="heatmapIsLoading" style="width: 200px;"></div>
+            <div id="heatmap" style="height: 400px; width: 200px; margin-top: 0px; margin-left: 10px; margin-top: 0px;"></div>
+        </div>
+
+
+        <div ng-class="showgraphSidebar ? 'col-xs-3-custom' : 'hidden'" style="padding-left: 0px; padding-right: 0px;" id="colPush" >
+            <div class="well" style="margin-top: 5px; padding-left: 5px; padding-right: 5px;">
+                <div>Header information</div>
+                <div id="legendVis" style="width: 100%; margin-top: 0px; margin-left: 0px; margin-top: 0px;"></div>
+<!--                <canvas id="legendCanvas"></canvas>-->
+            </div>
+
+<!--
+            <script>
+                var screenWidth = $(window).width();
+                $('#legendCanvas').css("width", screenWidth * 0.25);
+
+                var canvas = document.getElementById("legendCanvas");
+                var context = canvas.getContext("2d");
+                var centerX = canvas.width / 2;
+                var centerY = canvas.height / 2;
+                var radius = 15;
+
+                context.beginPath();
+                context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+                context.fillStyle = "green";
+                context.fill();
+                context.lineWidth = 3;
+                context.strokeStyle = "#003300";
+                context.stroke();
+
+                context.beginPath();
+                context.arc(centerX + 30, centerY, radius, 0, 2 * Math.PI, false);
+                context.fillStyle = "red";
+                context.fill();
+                context.lineWidth = 3;
+                context.strokeStyle = "#330000";
+                context.stroke();
+            </script>
+-->
+          <!--<div class="list-group">
+            <a href="#" class="list-group-item active">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+            <a href="#" class="list-group-item">Link</a>
+        </div>-->
+        </div><!--/.sidebar-offcanvas-->
+
+
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</body>
+</html>

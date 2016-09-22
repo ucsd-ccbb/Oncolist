@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Force-Directed Graph</title>
+<style>
+
+.node {
+  cursor: pointer;
+  stroke: #3182bd;
+  stroke-width: 0.5px;
+}
+
+.node text {
+  font: 5px helvetica;
+}
+
+
+
+.link {
+  fill: none;
+  stroke: #9ecae1;
+  stroke-width: 0.5px;
+  opacity:.5
+
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="../js/colorbrewer.min.js"></script>
+<script type='text/javascript' src="http://bost.ocks.org/mike/fisheye/fisheye.js?0.0.3"> </script>
+
+<script>
+
+var w = window.innerWidth,  //800,
+    h = window.innerHeight,  //600,
+    root;
+
+var keyc = true, keys = true, keyt = true, keyr = true, keyx = true, keyd = true, keyl = true, keym = true, keyh = true, key1 = true, key2 = true, key3 = true, key0 = true
+
+var focus_node = null, highlight_node = null;
+
+
+var min_zoom = 0.1;
+var max_zoom = 7;
+var nominal_base_node_size = 8;
+var nominal_text_size = 10;
+var max_text_size = 24;
+var nominal_stroke = 0.5;
+var max_stroke = 4.5;
+var max_base_node_size = 36;
+
+var highlight_color = "blue";
+var highlight_trans = 0.1;
+var size = d3.scale.pow().exponent(1)
+             .domain([1,100])
+             .range([8,24]);
+
+
+var force = d3.layout.force()
+    .size([w, h])
+    .on("tick", tick)
+    .linkDistance(30);
+
+var min_zoom=0.1;
+var max_zoom = 7;
+
+var svg = d3.select("body").append("svg")
+    .attr("width", w)
+    .attr("height", h);
+
+//var svg = d3.select("body").append("svg");
+var zoom = d3.behavior.zoom().scaleExtent([min_zoom,max_zoom])
+var g = svg.append("g");
+svg.style("cursor","move");
+
+
+
+var link = svg.selectAll(".link"),
+    link2 = svg.selectAll(".link"),
+    node = svg.selectAll(".node"),
+    node2 = svg.selectAll(".node");
+
+var nodeg = g.selectAll(".node")
+
+var link = svg.selectAll(".link"),
+    link2 = svg.selectAll(".link"),
+    node = svg.selectAll(".node"),
+    node2 = svg.selectAll(".node");
+
+
+
+
+d3.json("author_gene_bp.json", function(json) {
+  root = json;
+  //Give nodes ids and initialize variables
+  for(var i=0; i<root.nodes.length; i++) {
+    var node = root.nodes[i];
+    node.idx = i;
+    node.group_id = node.com
+    node.collapsing = 0;
+    node.collapsed = false,
+    node.size = Math.sqrt(node.degree)*5
+
+
+  }
+
+
+  //Give links ids and initialize variables
+  for(var i=0; i<root.links.length; i++) {
+    var link = root.links[i];
+    var node_s = link.source;
+    var node_t = link.target;
+    link.source = root.nodes[link.source];
+    link.old_source = link.source
+    link.target = root.nodes[link.target];
+    link.old_target = link.target
+    link.idx = i;
+  }
+
+
+  update();
+});
+
+function update() {
+  //Keep only the visible nodes
+  var nodes = root.nodes.filter(function(d) {
+    return d.collapsing==0;
+  });
+  var links = root.links;
+  //Keep only the visible links
+  links = root.links.filter(function(d) {
+    return ((d.source.collapsing==0) && (d.target.collapsing==0));
+  });
+
+  // remove unused text items
+  var textitems = svg.selectAll("text")
+    .data(nodes, function(d){
+        if (d.degree > 2) {return d.idx; };
+  });
+
+  textitems.exit().remove()
+
+
+  force
+      .nodes(nodes)
+      .links(links)
+      .start();
+
+  // Update the links…
+  link = link.data(links, function(d) { return d.idx; });
+
+  // Exit any old links.
+  link.exit().remove();
+
+  // Enter any new links.
+  link.enter().insert("line", ".node")
+      .attr("class", "link")
+      .attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+  // Update the nodes…
+  node = node.data(nodes, function(d){ return d.idx; }).style("fill", color)
+             .attr("r", function(d) { return Math.sqrt(d.size) || 3; })
+             .on("mouseover", mouse_highlight)
+             .on("mouseout", mouse_offlight)
+
+  // Exit any old nodes.
+  node.exit().remove();
+
+  // remove unused text items
+  var textitems = svg.selectAll("text")
+    .data(nodes, function(d){
+        if (d.degree > 5) {return d.idx; };
+        });
+
+  textitems.exit().remove()
+  //d3.selectAll('text').remove()
+
+  node.enter().append("text")
+      .attr("dx", 10)
+      .attr("dy", ".35em")
+      .text(function(d) {return d.id;})
+      .style("font-size","7px")
+      .on("click",click);
+
+  // Exit any old nodes.
+  node.exit().remove();
+
+
+  // Enter any new nodes.
+  node.enter().append("circle")
+      .attr("class", "node")
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; })
+      .attr("r", function(d) { return Math.sqrt(d.size) || 3; })
+      .style("fill", color)
+      .on("mouseover", mouse_highlight)
+      .on("mouseout", mouse_offlight)
+      .on("click", click)
+      .call(force.drag)
+      .append("svg:title")
+      .text(function(d) {return d.id});
+
+
+}
+
+
+function mouse_highlight(d) {
+    //window.alert("is the mousover working?")
+    d3.select(this)
+        .transition()
+        .duration(200)
+        .attr("r",function(d) { return Math.sqrt(d.size)*1.5 || 3; })
+        .style("stroke","#F1AB14")
+        .style("stroke-width",2);
+
+
+    // also highlight neighborhood
+    // loop over all nodes and check if they are linked to d
+
+    // set focal node
+    a = d  //root.nodes[20]
+    d3.selectAll(".node").style("stroke", function(o) {
+                return isConnected(o,a) ? "#F1AB14" : "#5CA8D0";
+            })
+            .style("stroke-width", function(o) {
+                return isConnected(o,a) ? 2 : nominal_stroke
+            });
+    d3.selectAll(".link").style("stroke-width", function(l) {
+                return isLinkConnected(a,l) ? 1 : nominal_stroke
+        })
+        .style("stroke", function(l) {
+            return isLinkConnected(a,l) ? "#149AF1" : "#9ecae1";
+        });
+
+
+    //b = root.nodes[1].idx
+    //window.alert(isConnected(a,b))
+}
+
+function mouse_offlight() {
+    // revert back to normal
+    d3.select(this)
+        .transition()
+        .duration(200)
+        .attr("r", function(d) { return Math.sqrt(d.size) || 3; })
+        .style("fill",color)
+        .style("stroke","#5CA8D0")
+        .style("stroke-width",nominal_stroke)
+
+    //a = d  //root.nodes[20]
+    d3.selectAll(".node").style("stroke", function(o) {
+            return "#5CA8D0";
+            })
+            .style("stroke-width",nominal_stroke);
+
+    d3.selectAll(".link").style("stroke-width", nominal_stroke)
+            .style("stroke", "#9ecae1")
+
+
+}
+
+// function and linking variable to find out if two nodes are connected
+function isConnected(a, b) {
+    var linkedByIndex = {};
+    root.links.forEach(function(d) {
+        //window.alert(d.source.idx)
+        //window.alert(d.target.idx)
+      linkedByIndex[d.source.idx + "," + d.target.idx] = true;
+    });
+
+    return linkedByIndex[a.idx + "," + b.idx] || linkedByIndex[b.idx + "," + a.idx] || a.idx == b.idx;
+}
+
+// function to find out if link is connected to node
+function isLinkConnected(a,l) {
+    return (l.target.idx==a.idx) || (l.source.idx==a.idx)
+}
+
+var circle = node.append("path")
+                 .attr("d", d3.svg.symbol()
+                 .size(function(d) { return Math.PI*Math.pow(size(d.size)||nominal_base_node_size,2); })
+                 .type(function(d) { return d.type; }))
+	             .style("stroke-width", 3);
+
+
+
+zoom.on("zoom", function() {
+
+    var stroke = nominal_stroke;
+    if (nominal_stroke*zoom.scale()>max_stroke) stroke = max_stroke/zoom.scale();
+    link.style("stroke-width",stroke);
+    circle.style("stroke-width",stroke);
+
+	var base_radius = nominal_base_node_size;
+    if (nominal_base_node_size*zoom.scale()>max_base_node_size) base_radius = max_base_node_size/zoom.scale();
+        circle.attr("d", d3.svg.symbol()
+        .size(function(d) { return Math.PI*Math.pow(size(d.size)*base_radius/nominal_base_node_size||base_radius,2); })
+        .type(function(d) { return d.type; }))
+
+	//circle.attr("r", function(d) { return (size(d.size)*base_radius/nominal_base_node_size||base_radius); })
+	//if (!text_center) text.attr("dx", function(d) { return (size(d.size)*base_radius/nominal_base_node_size||base_radius); });
+
+	//var text_size = nominal_text_size;
+    //if (nominal_text_size*zoom.scale()>max_text_size) text_size = max_text_size/zoom.scale();
+    //text.style("font-size",text_size + "px");
+
+	svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+});
+
+svg.call(zoom);
+
+resize()
+
+d3.select(window).on("resize", resize);
+
+function resize() {
+    var width = window.innerWidth, height = window.innerHeight;
+	svg.attr("width", width).attr("height", height);
+
+	force.size([force.size()[0]+(width-w)/zoom.scale(),force.size()[1]+(height-h)/zoom.scale()]).resume();
+    w = width;
+	h = height;
+}
+
+
+
+
+
+
+
+function tick() {
+  link.attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+  node.attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+
+  d3.selectAll("circle").attr("cx", function (d) {
+        return d.x;
+    })
+        .attr("cy", function (d) {
+        return d.y;
+    });
+  d3.selectAll("text").attr("x", function (d) {
+        return d.x;
+    })
+        .attr("y", function (d) {
+        return d.y;
+    });
+
+
+
+}
+
+// Color nodes by community membership
+var color_map = d3.scale.ordinal()
+                  .range(colorbrewer.RdBu[9])
+function color(d) {
+  return d3.rgb(d.rfrac,d.gfrac,d.bfrac)  //color_map(d.com)  //
+}
+
+// Toggle children on click.
+function click(d) {
+  if (!d3.event.defaultPrevented) {
+
+      focal_com = d.com;
+      num_focal_com = 0;
+      focal_collapse_state = d.collapsed
+      root.nodes.forEach(function(n) {
+          // find number in each focal community
+          if (n.com==focal_com){
+            num_focal_com++;
+            if (focal_collapse_state){
+                n.collapsing--;
+            } else {
+                n.collapsing++;
+            }
+          }
+
+      });
+
+
+      // if d is not already collapsed, set node size to community size
+      if (!focal_collapse_state){
+        d.size=num_focal_com;
+      } else{
+        //default size
+
+        d.size = Math.sqrt(d.degree)*5
+      }
+
+      // change source/target of in-community nodes
+      root.links.forEach(function(l) {
+          // find links between communities (ignore within community links)
+          //window.alert(l.target)
+          //window.alert(l.old_target)
+          source_com_temp = root.nodes[l.source.idx].com
+          target_com_temp = root.nodes[l.target.idx].com
+          //window.alert(source_com_temp==d.com)
+          if((source_com_temp==focal_com) && (target_com_temp!=focal_com)) {
+            if(focal_collapse_state){
+              l.source = l.old_source
+            } else {
+              l.source = d
+            }
+          } else if ((source_com_temp!=focal_com) && (target_com_temp==focal_com)){
+              if(focal_collapse_state){
+                l.target=l.old_target
+            } else {
+                l.target = d
+            }
+
+          }
+    });
+
+
+      // don't collapse the focal node
+      d.collapsing=0
+      d.collapsed = !d.collapsed;
+
+
+
+      // find links between each community- loop over links
+      //root.links.forEach(function(l) {
+          //// find links between communities (ignore within community links)
+
+          //source_com_temp = root.nodes[l.source.id].com
+          //target_com_temp = root.nodes[l.target.id].com
+          ////window.alert(source_com_temp==d.com)
+          //if((source_com_temp==focal_com) && (target_com_temp==focal_com)) {
+            //if(focal_collapse_state){
+              //l.target.collapsing--;
+              //l.source.collapsing--;
+            //} else {
+              //l.target.collapsing++;
+              //l.source.collapsing++;
+            //}
+            ////set all other nodes in community to same state as d
+            //l.target.collapsed = !focal_collapse_state
+            //l.source.collapsed = !focal_collapse_state
+          //} else if ((source_com_temp==focal_com) && (target_com_temp!=focal_com)){
+              //if(focal_collapse_state){
+                //l.source.collapsing--;
+            //} else {
+                //l.source.collapsing++;
+            //}
+            //set all other nodes in community to same state as d
+            //l.source.collapsed = !focal_collapse_state
+
+          //}
+          //other 2 cases never happen- source is always focal community
+    //});
+
+
+  }
+  update();
+}
+
+</script>
