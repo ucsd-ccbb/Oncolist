@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>REST links for debugging</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link href="online/bootstrap-combined.min.css" rel="stylesheet" type="text/css"/> <!-- TEMP -->
+        <link href="online/font-awesome.min.css" rel="stylesheet" type="text/css"/> <!-- TEMP -->
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="online/bootstrap.min.css" rel="stylesheet" type="text/css"/> <!-- TEMP -->
+
+        <script src="js/env.js" type="text/javascript"></script>
+        <script src="js/elasticUI/angular.js" type="text/javascript"></script>
+        <script src="js/elasticUI/elastic.js" type="text/javascript"></script>
+        <script src="js/elasticUI/elasticsearch.angular.js" type="text/javascript"></script>
+
+        <script src="online/jquery-2.1.1.min.js" type="text/javascript"></script> <!-- TEMP-->
+
+        <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.0/ui-bootstrap-tpls.min.js"></script>
+        <script src="online/angular-route.min.js" type="text/javascript"></script>
+        <script src="online/lodash.min.js" type="text/javascript"></script>
+        <script src="online/ui-bootstrap-tpls.min.js" type="text/javascript"></script>
+
+        <script src="js/angular-clipboard.js" type="text/javascript"></script>
+        <script src="js/servicesLinks.js" type="text/javascript"></script>
+        <script src="js/restAppLinks.js" type="text/javascript"></script>
+
+        <script src="js/bootstrap.min.js" type="text/javascript"></script>
+
+        <link href="css/commonstyles.css" rel="stylesheet" type="text/css"/>
+        <script src="js/d3.v3.js" type="text/javascript"></script>
+        <script src="online/jquery.min.js" type="text/javascript"></script>
+
+        <style>
+            .active-rest-link {
+              width: 80%;
+              border: 1px solid #707070;
+              color: #222;
+              padding: 5px 10px;
+              font-size: 16px;
+              box-sizing: border-box;
+            }
+        </style>
+
+    </head>
+    <body ng-app="myApp" ng-controller="myCtrl">
+
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <div class="navbar-brand" style="position:relative; bottom:0px;">
+                        <a href="#projects" class="no-underline">
+
+                            <span class="text-muted-dark small-margin-left large-margin-right" style="font-family: Verdana, Geneva, sans-serif">REST <span class="text-theme1">Links</span></span>
+                        </a>
+                    </div>
+                    <div class="input-group input-group-sm" style="margin-top: 10px;">
+                      <input type="text"
+                      ng-model="ids.es_id"
+                      ng-trim="false"
+                       class="form-control input-lg noShadow"
+                       id="search-ch-small"
+                       style="border-right: 0px solid white; border-color: #cccccc;"
+                       placeholder="Enter ElasticSearch ID">
+
+                      <span class="input-group-btn">
+                        <button class="btn btn-default btn-lg" style="border-left: 0px solid white;  color: #A1A6A8; border-top-left-radius: 0px; border-bottom-left-radius: 0px;"
+                        ng-click="getRESTContent('http://localhost:8182/nav/elasticsearch/fileByIdRaw/clusters_tcga_louvain/' + ids.es_id + '?callback=JSON_CALLBACK')">
+                        <!--ng-click="getRESTContent('http://ec2-52-32-253-172.us-west-2.compute.amazonaws.com/nav/elasticsearch/fileByIdRaw/clusters_tcga_louvain/' + ids.es_id + '?callback=JSON_CALLBACK')">-->
+                          <span id="searchIt" class="fa fa-search fa-lg"></span>
+                        </button>
+                      </span>
+                    </div><!-- /input-group -->
+                </div>
+            </div>
+        </nav>
+        <div class="container-fluid" style="margin-top: 50px;">
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-sm-2">
+                </div>
+                <div class="col-sm-8">
+                    <h4>Click on one of the links below to make a REST call to the corresponding service.</h4>
+                    <h4><small>Your results will be displayed in a blue text area below.</small></h4>
+                </div>
+                <div class="col-sm-2">
+                    {{serverHost}}
+                </div>
+
+                <br /><br />
+
+            </div>
+
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-sm-2">
+                </div>
+                <div class="col-sm-8">
+                    <div class="well">
+                        <h3 style="margin-top: 5px;">Oncolist Api <small>/search/clusters</small></h3>
+                        <table  class="table">
+                            <thead>
+                                <tr><th>Parameter</th><th>Value</th><th>Type</th><th>Location</th><th>Description</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="apiLink in APILinks" class="required"><td class="name">{{apiLink.parameter}}</td><td class="parameter"><input name="params[q]" placeholder="{{apiLink.required}}"></td><td class="type">string</td><td class="location"><p>query</p></td><td class="description"><p>query string. Examples: "CDK2", "NM_052827", "204639_at". The detailed query syntax can be found at http://oncolist.org/search/clusters</p></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                </div>
+            </div>
+
+
+
+        </div>
+    </body>
+</html>

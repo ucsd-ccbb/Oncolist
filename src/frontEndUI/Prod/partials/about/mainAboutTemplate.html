@@ -1,0 +1,287 @@
+<!--
+<div class="row">
+    <div class="col-sm-12">
+
+
+        <img class="rwdimgmap" src="../../images/oncolist2.png" usemap="#oncolistmap" alt="" />
+    	<map name="oncolistmap">
+    		<area shape="poly" coords="0,1850,400,1850,400,2300,0,2300" ng-click="showPage = 'GENEMODULES'" title="gene modules" alt="Oncolist click" />
+            <area shape="poly" coords="401,1850,800,1850,800,2300,401,2300" ng-click="showPage = 'CONDITIONS'" title="conditions" alt="Oncolist click" />
+            <area shape="poly" coords="801,1850,1200,1850,1200,2300,801,2300" ng-click="showPage = 'AUTHORS'" title="authors" alt="Oncolist click" />
+            <area shape="poly" coords="1201,1850,1600,1850,1600,2300,1201,2300" ng-click="showPage = 'DRUGS'" title="drugs" alt="Oncolist click" />
+    	</map>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <image style="width: 100%;" src="../../images/hr1.png" />
+    </div>
+</div>
+-->
+<style>
+
+    /* centered columns styles */
+    .row-centered {
+        text-align:center;
+    }
+    .col-centered {
+    }
+    .col-right {
+        text-align:right;
+    }
+    .col-left {
+        text-align:left;
+    }
+    .dash{
+      border: 0 none;
+      border-top: 2px dashed #979797;
+      background: none;
+      height:0;
+    }
+    .howitworkslink {
+        background-color: #979797;
+    }
+    @media (min-width: 769px) {
+        #mainImg {
+           position: absolute;
+           top: 116px;
+           left: 50%;
+           width: 1128px;
+           height: 284px;
+           margin-left: -640px; /* Half the width */
+           overflow-x: hidden;
+        }
+    }
+</style>
+<div ng-if="project.term_list.length < 1">
+<img class="hidden-xs" id="mainImg" src="../../images/about/network_watermark.png" alt="" />
+<div class="row row-centered hidden-xs">
+    <div class="col-sm-6 col-right">
+        <h1 style="font-size: 66pt;">Oncolist</h1>
+    </div>
+    <div class="col-sm-6 col-left" style="margin-top: 25px;">
+        <h1 style="font-size: 20pt;">A gene-centric search <br />engine for cancer</h1>
+    </div>
+</div>
+
+<div class="row hidden-xs">
+    <div class="col-sm-12" style="overflow-x: hidden;">
+        <hr class="dash" />
+    </div>
+</div>
+<div class="row row-centered hidden-xs">
+    <div class="col-sm-12 col-centered">
+        Oncolist is a search engine which ranks gene networks, conditions, publication <br />
+        authors, and drugs in cancer datasets derived from The Cancer Genome Atlas (TCGA) <br />
+        and the Gene Expression Omnibus (GEO)
+    </div>
+</div>
+<div class="row hidden-xs">
+    <div class="col-sm-12" style="overflow-x: hidden;">
+        <hr class="dash" />
+    </div>
+</div>
+<!--
+<div class="row row-centered hidden-xs">
+    <div class="col-sm-3 col-centered">
+        <a href="#/harvesting-about" style="text-decoration: none;">
+            <image src="../../images/about/harvest.png" onmouseover="this.src='../../images/about/harvestyellow.png'" onmouseout="this.src='../../images/about/harvest.png'" />
+        </a>
+        <br />
+        <h3>Harvesting</h3>
+        We gather data from<br />
+        TCGA, GEO, ClinVar,<br />
+        DrugBank, COSMIC and <br />
+        PubMed
+    </div>
+    <div class="col-sm-1 col-centered">
+        <span style="margin-top: 50px;" class="fa fa-arrow-right fa-4x" aria-hidden="true"></span>
+    </div>
+    <div class="col-sm-4 col-centered">
+        <image src="../../images/about/processing.png" />
+        <h3>Processing</h3>
+        Our engineers develop<br/>
+        algorithms which are applied<br/>
+        through cloud computing.  Data<br/>
+        is indexed and stored in the<br/>
+        cloud.
+    </div>
+    <div class="col-sm-1 col-centered">
+        <span style="margin-top: 50px;" class="fa fa-arrow-right fa-4x" aria-hidden="true"></span>
+    </div>
+    <div class="col-sm-3 col-centered">
+        <image src="../../images/about/scoring.png" />
+        <h3>Scoring</h3>
+        A scoring algorithm is<br/>
+        used to filter and<br/>
+        rank your results.
+    </div>
+</div>
+-->
+
+
+<div class="row row-centered hidden-xs">
+    <div class="col-sm-2 col-centered">
+        <a href="#/harvesting-about" style="text-decoration: none;">
+            <image src="../../images/about/harvest.png" onmouseover="this.src='../../images/about/harvestyellow.png'" onmouseout="this.src='../../images/about/harvest.png'" />
+        </a>
+        <br />
+        <h3>Harvesting</h3>
+        We gather data from<br />
+        TCGA, GEO, ClinVar,<br />
+        DrugBank, COSMIC and <br />
+        PubMed
+    </div>
+    <div class="col-sm-1 col-centered">
+        <span style="margin-top: 50px;" class="fa fa-arrow-right fa-4x" aria-hidden="true"></span>
+    </div>
+    <div class="col-sm-2 col-centered">
+        <image src="../../images/about/processing.png" />
+        <h3>Processing</h3>
+        Our engineers develop<br/>
+        algorithms which are applied<br/>
+        through cloud computing.<br />
+        Data is indexed and <br/>
+        stored in thecloud.
+    </div>
+    <div class="col-sm-1 col-centered">
+        <span style="margin-top: 50px;" class="fa fa-arrow-right fa-4x" aria-hidden="true"></span>
+    </div>
+    <div class="col-sm-2 col-centered">
+        <image src="../../images/about/scoring.png" />
+        <h3>Scoring</h3>
+        A scoring algorithm is<br/>
+        used to filter and<br/>
+        rank your results.
+    </div>
+    <div class="col-sm-1 col-centered">
+        <span style="margin-top: 50px;" class="fa fa-arrow-right fa-4x" aria-hidden="true"></span>
+    </div>
+    <div class="col-sm-2 col-centered">
+        <a href="#/multipurpose-genes" style="text-decoration: none;">
+            <image src="../../images/about/analysis3.png" onmouseover="this.src='../../images/about/analysis3blue.png'" onmouseout="this.src='../../images/about/analysis3.png'" />
+        </a>
+        <br />
+        <h3>Analysis</h3>
+        Lorem ipsum dolor<br/>
+        sit amet, consectetur<br/>
+         adipiscing elit.
+    </div>
+</div>
+
+<div class="hidden-xs">
+<div class="row">
+    <div class="col-sm-12" style="overflow-x: hidden;">
+        <hr class="dash" />
+    </div>
+</div>
+
+<div class="row row-centered hidden-xs">
+    <div class="col-sm-12 col-centered">
+        <h1 style="font-size: 56pt;">How it works</h1>
+        <span style="font-weight: bold;">SEARCH</span> for one or many genes. Here is an example:&nbsp;&nbsp;
+        <a class="btn btn-warning btn-xs" href="#" role="button" ng-click="tryBasicSearch('MULTIPLE')"><span style="color: white;" class="fa fa-search fa-xs search-main"></span> Try it out</a>
+        <!--<a class="btn btn-warning btn-xs" href="#/disease-disease-distance" role="button"><span style="color: white;" class="fa fa-search fa-xs search-main"></span>disease-disease-distance</a>-->
+    </div>
+</div>
+
+<div class="row hidden-xs">
+    <div class="col-sm-12" style="overflow-x: hidden;">
+        <hr class="dash" />
+    </div>
+</div>
+
+<div class="row row-centered hidden-xs">
+    <div class="col-sm-12 col-centered">
+        <image src="../../images/about/filter.png" /><br />
+        <span style="font-weight: bold;">FILTER</span> your results via:
+    </div>
+</div>
+
+
+<div class="row row-centered hidden-xs">
+    <div class="col-sm-3 col-centered">
+        <a href="#/gene-module-about" style="text-decoration: none;">
+            <span style="margin-top: 50px; color: #686868;" class="fa fa-arrow-down fa-4x" aria-hidden="true"></span>
+            <p>&nbsp;</p>
+            <image style="margin-bottom: 30px;" src="../../images/about/gene_module2.png" onmouseover="this.src='../../images/about/gene_module2blue.png'" onmouseout="this.src='../../images/about/gene_module2.png'" />
+            <br />
+            <h4 style="color: #686868;">GENE MODULES</h4>
+        </a>
+    </div>
+    <div class="col-sm-3 col-centered">
+        <a href="#/condition-about" style="text-decoration: none;">
+            <span style="margin-top: 50px; color: #686868;" class="fa fa-arrow-down fa-4x" aria-hidden="true"></span>
+            <p>&nbsp;</p>
+            <image style="margin-bottom: 30px;" src="../../images/about/condition2.png" onmouseover="this.src='../../images/about/condition2blue.png'" onmouseout="this.src='../../images/about/condition2.png'" />
+            <h4 style="color: #686868;">CONDITIONS</h4>
+        </a>
+    </div>
+    <div class="col-sm-3 col-centered">
+        <a href="#/author-about" style="text-decoration: none;">
+            <span style="margin-top: 50px; color: #686868;" class="fa fa-arrow-down fa-4x" aria-hidden="true"></span>
+            <p>&nbsp;</p>
+            <image style="margin-bottom: 30px;" src="../../images/about/author2.png" onmouseover="this.src='../../images/about/author2blue.png'" onmouseout="this.src='../../images/about/author2.png'" />
+            <h4 style="color: #686868;">AUTHORS</h4>
+        </a>
+    </div>
+    <div class="col-sm-3 col-centered">
+        <a href="#/drug-about" style="text-decoration: none;">
+            <span style="margin-top: 50px; color: #686868;" class="fa fa-arrow-down fa-4x" aria-hidden="true"></span>
+            <p>&nbsp;</p>
+            <image style="margin-bottom: 30px;" src="../../images/about/drug2.png" onmouseover="this.src='../../images/about/drug2blue.png'" onmouseout="this.src='../../images/about/drug2.png'" />
+            <h4 style="color: #686868;">DRUGS</h4>
+        </a>
+    </div>
+</div>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div class="row hidden-xs">
+    <div class="col-sm-7">
+        <a href="http://cytoscape.org" style="text-decoration: none;">
+            <image style="float: left; margin-left: 10px;" src="../../images/about/cytoscape.png" />
+        </a>
+    </div>
+    <div class="col-sm-5">
+        <a href="http://ccbb.bio" style="text-decoration: none;">
+            <image style="float: right; margin-right: 10px;" src="../../images/about/ccbb_bio.png" />
+        </a>
+    </div>
+</div>
+
+<p>&nbsp;</p>
+
+<!--<div class="row">
+    <div class="col-sm-3">
+        <a style="text-decoration: none; border: 0px; cursor: pointer;" ng-click="showPage = 'GENEMODULES'">
+            <image src="../../images/geneModuleClick4.png" />
+        </a>
+    </div>
+    <div class="col-sm-3">
+        <a style="text-decoration: none; border: 0px; cursor: pointer;" ng-click="showPage = 'CONDITIONS'">
+            <image src="../../images/conditionClick4.png" />
+        </a>
+    </div>
+    <div class="col-sm-3">
+        <a style="text-decoration: none; border: 0px; cursor: pointer;" ng-click="showPage = 'AUTHORS'">
+            <image src="../../images/authorClick4.png" />
+        </a>
+    </div>
+    <div class="col-sm-3">
+        <a style="text-decoration: none; border: 0px; cursor: pointer;" ng-click="showPage = 'DRUGS'">
+            <image src="../../images/drugsClick4.png" />
+        </a>
+    </div>
+</div>
+<div class="row" style="margin-top: 100px;">
+    <div class="col-sm-9">
+    </div>
+    <div class="col-sm-3">
+        <image style="width: 250px;" src="../../images/ccbb_logo.png" />
+    </div>
+</div>
+-->
+</div>

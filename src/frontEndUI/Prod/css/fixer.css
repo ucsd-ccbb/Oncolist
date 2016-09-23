@@ -1,0 +1,17 @@
+.small-margin-left {
+    margin-left: 0.5em;
+}
+.large-margin-right {
+    margin-right: 2em;
+}
+.text-muted-dark {
+    color: #676767;
+}
+.text-theme1 {
+    color: #ea9123;
+}
+.hr-theme1 {
+    height: 6px;
+    background-color: gainsboro;
+    border-left: 160px solid #ea9123;
+}

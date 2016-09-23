@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../js/d3.v3.js" charset="UTF-8" type="text/javascript"></script>
+  <link href="../js/bootstrap-combined.min.css" rel="stylesheet" type="text/css"/> <!-- TEMP -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+  <link href="../js/bootstrap.min.css" rel="stylesheet" type="text/css"/> <!-- TEMP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.11.0/vis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.11.0/vis.min.css"></script>
+  <!--z<script src="https://kenedict.com/networks/startups/js/vis.js"></script>-->
+
+
+
+  <script src="../js/jquery-2.1.1.min.js" type="text/javascript"></script> <!-- TEMP-->
+  <script src="../js/elasticUI/angular.js" type="text/javascript"></script>
+  <script src="../js/lodash.min.js" type="text/javascript"></script> <!-- TEMP-->
+
+  <script src="../js/services.js" type="text/javascript"></script>
+  <script src="../js/ClusterGroupApp.js" type="text/javascript"></script>
+  <link href="../css/commonstyles.css" rel="stylesheet" type="text/css"/>
+  <link href="../css/sample1.css" rel="stylesheet" type="text/css"/> <!-- TEMP -->
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</head>
+<body ng-app="myApp" ng-controller="myCtrl" ng-init="init_page()">
+  <div>
+    <div class="container-fluid">
+
+      <div class="row">
+        <div class="col-sm-12">
+          <button class="btn btn-link" style="padding-bottom: 0px; margin-bottom: -5px;" ng-click="openInNewWindow()">Open in new window</button>
+          <!--<button class="btn btn-link" style="padding-bottom: 0px; margin-bottom: -5px;" ng-click="openExport()">Export</button>-->
+          <div id="vizCtrl" name="vizCtrl"></div>
+
+          <div id="evventSpan"></div>
+          <div id="heatmapIsLoading"></div>
+          <div id="heatmap" style="height: 400px; width: 200px;"></div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

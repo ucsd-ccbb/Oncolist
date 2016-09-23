@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../js/d3.v3.js" charset="UTF-8" type="text/javascript"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+  <link href="../js/bootstrap.min.css" rel="stylesheet" type="text/css"/> <!-- TEMP -->
+
+  <script src="../js/jquery-2.1.1.min.js" type="text/javascript"></script> <!-- TEMP-->
+  <script src="../js/elasticUI/angular.js" type="text/javascript"></script>
+  <script src="../js/lodash.min.js" type="text/javascript"></script> <!-- TEMP-->
+
+  <script src="../js/services.js" type="text/javascript"></script>
+  <script src="../js/colorbrewer.min.js"></script>
+  <script src="../js/forcegraphApp.js" type="text/javascript"></script>
+</head>
+<body ng-app="myApp" ng-controller="myCtrl" ng-init="init_page()">
+  <div>
+    <div class="container-fluid">
+
+      <div class="row">
+        <div class="col-sm-12">
+          <button class="btn btn-link pull-left hidden-xs" style="padding-bottom: 0px; margin-bottom: -5px;" ng-show="showMore.origin != 'newWindow'" ng-click="openInNewWindow()">Open in new window</button>
+          {{info.origin}}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,136 @@
+                <div class="col-sm-1">
+                </div>
+                <div class="col-sm-1">
+                </div>
+                <div class="col-sm-10">
+                    <div class="row" ng-repeat="searchResultsGroup in searchResultsWithGroups| filter: geneTabFilter">
+                        <div class="col-sm-12" ng-if="resultsPresent">
+
+                          <div id="enrichModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                  <h4 class="modal-title" id="myModalLabel">Enrichment results</h4>
+                                </div>
+                                <div class="modal-body">
+                                  <div class="modalMsg">
+                                    <table class="table table-striped">
+                                      <tr><th>Top enrichment results (Gene Ontologies)</th><th style="white-space: nowrap;">GO ID</th><th style="white-space: nowrap;">Q log value</th></tr>
+                                      <tr ng-repeat="hg_item in modalData | orderBy:'qvalueLog':true"><td><span style="font-weight: bold;">{{hg_item.name}}</span><br /><div style="font-style: italic; margin-left: 10px;">{{hg_item.description}}</div></td>
+                                        <td style="white-space: nowrap;">{{hg_item.GO_id}}</td><td style="white-space: nowrap;">{{hg_item.qvalueLog == 0 ? 0.01 : hg_item.qvalueLog}}</td></tr>
+                                    </table>
+
+
+                                  </div>
+                                  <div class="actionsBtns">
+                                    <button class="btn btn-default" data-dismiss="modal">Ok</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div><!--/modal-->
+
+
+
+                            <div class="modal fade" id="heatmapModal" tabindex="-1" role="dialog" aria-labelledby="heatmapModalLabel">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">Heat Map</h4>
+                                  </div>
+                                  <div class="modal-body">
+                                    <div id="heatmap_modal_body"></div>
+
+                                    <div id="heatmapIsLoading"></div>
+                                    <div id="heatmap"></div>
+                                    <button class="btn btn-primary" ng-click="resizeHeatMap()">View Full Size</button>
+                                    <button class="btn btn-primary" ng-click="openPlotlyExternal()">Edit Chart</button>
+                                  </div>
+                                  <div class="modal-footer" style="margin-top: 0px;">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div ng-repeat="hit in searchResultsGroup.grouped_items | filter: clusterTopQValueFilter | orderBy: 'groupTopQValue':true" ng-init="limit = 6" > <!--'average_q_value':true"> -->
+                                <div class="slide-content">
+                                    <div class="col-xs-12 col-sm-12 excerpet">
+                                      <div style="background-color: whitesmoke; height: 35px; padding-top: 8px; padding-bottom: auto; padding-left: 4px; border-bottom: 1px solid #C0C0C0;">
+                                      <span style="line-height: 18px; font-size: 16px; margin-top: 8px; margin-left: 4px;">
+                                              <span ng-if="hit.group_title != 'Other'"><a style="color: #707070;" href="https://www.ebi.ac.uk/QuickGO/GTerm?id={{hit.topGOId}}#info=1" target="_blank">{{hit.group_title}} ({{hit.topGOId}})</a></span>
+                                              <span ng-if="hit.group_title == 'Other'">Non-annotating clusters:</span>
+                                              <!--<span ng-if="hit.group_members.length > 4">View more results ({{hit.group_members.length}})</span>-->
+                                      </span>
+                                      </div>
+                                      <div class="esc-separator" style="opacity: 1; background-color: rgb(214, 214, 214);"></div>
+
+                                      <div ng-repeat="group_hit in hit.group_members | orderBy: 'topQValue':true | limitTo:limit"  style="margin-left: 25px;">
+
+                                        <img class="pull-left hidden-xs" style="margin-right: 5px; margin-top: 15px; width: 85px; height: 85px;" src="thumbnails/{{group_hit.hit_id}}.png" />
+
+                                        <h5 style="cursor: pointer;">
+                                          <!--<a data-toggle="modal" data-target="#myClusterModal" style="cursor: pointer;" ng-click="setClusterIFrameContent('http://geneli.st:8181/Prototype2/partials/VisJS_heatmap.html?geneList=' + terms_list-->
+                                          <a data-toggle="modal" data-target="#myClusterModal" style="cursor: pointer;" ng-click="setClusterIFrameContent('VisJS_heatmap.html?geneList=' + terms_list
+                                          + '&termId=' + group_hit.searchResultTitle+ '&clusterId=' + group_hit.hit_id + '&networkTitle=' + group_hit.searchResultTitle, group_hit.hit_id)">
+                                                {{group_hit.searchResultTitle}} ({{group_hit.filterValue}})
+                                            </a>
+                                        </h5>
+                                          <h5>
+                                            Tissue Type:
+                                            <a href="#/pathways-search-results" data-toggle="modal" data-target="#myModal" style="cursor: pointer;" ng-click="setExternalIFrameContent('https://en.wikipedia.org/wiki/' + group_hit.diseaseType)">
+                                              {{group_hit.diseaseType}}
+                                            </a>
+                                          </h5>
+                                          <!--<p>{{group_hit.md5hash}}<br /> {{group_hit.hypergeometricScores[0].name}}</p>-->
+                                          <p>
+                                              Data source: {{group_hit.searchResultSummary}} ({{group_hit.dataSetType}})&nbsp;&nbsp;&nbsp;
+                                              <!--<a href="#/heatmap-results/{{group_hit.searchResultTitle}}/{{group_hit.hit_id}}/{{group_hit.filterValue}}" ng-click="experiment()">Heat map - (matrix size: {{group_hit.filterValue}})</a> |-->
+                                                <!--<a data-toggle="modal" data-target="#myClusterModal" style="cursor: pointer;" ng-click="setClusterIFrameContent('http://geneli.st:8181/Prototype2/partials/Plotly_heatmap.html?geneList=' + group_hit.x_emphasizeInfoArrayWithWeights
+                                                + '&termId=' + group_hit.searchResultTitle+ '&clusterId=' + group_hit.hit_id + '&networkTitle=' + group_hit.searchResultTitle, group_hit.hit_id)">
+                                                  <span class="fa fa-th"></span> View Matrix ({{group_hit.filterValue}})
+                                              </a> &nbsp;&nbsp;|&nbsp;&nbsp;
+                                              <a data-toggle="modal" data-target="#myClusterModal" style="cursor: pointer;" ng-click="setClusterIFrameContent('http://geneli.st:8181/Prototype2/partials/VisJS_heatmap.html?geneList=' + terms_list
+                                              + '&termId=' + group_hit.searchResultTitle+ '&clusterId=' + group_hit.hit_id + '&networkTitle=' + group_hit.searchResultTitle, group_hit.hit_id)">
+                                                <span class="fa fa-share-alt"></span> View Network
+                                              </a>
+-->
+                                          </p>
+                                          <p style="display: none;">
+                                              <small> <span role="presentation">Lucene Score <strong>{{group_hit.luceneScore| number:4}}</strong></span> &nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                                                  <span role="presentation">Pubmed Normalized Score <strong>{{group_hit.searchResultScoreRank| number:4}}</strong></span> &nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                                                  <span role="presentation">Query Genes in Node List <strong>{{group_hit.emphasizeInfoArrayWithWeights.length}}</strong></span></small>
+                                          </p>
+                                          <p style="margin-top: -5px;">
+                                          </p>
+                                          <p style="margin-top: -5px;">
+                                              <div class="btn-group" ng-if="currentTab == 'OTHER_CLUSTERS'" style=" margin-bottom: 20px;">
+                                                  <button ng-repeat="enphasizeThis in group_hit.emphasizeInfoArray | orderBy:'toString()'"
+                                                   ng-click="setIFrameContent('information.html?termId=' + enphasizeThis + '&currentTab=GENE&snps=')"
+                                                    data-toggle="modal" data-target="#myModal"
+                                                          class="btn btn-default btn-xs" type="button">{{enphasizeThis}}</button>
+                                              </div>
+                                          </p>
+
+
+
+
+
+
+                                      </div>
+                                      <a ng-click="limit = 1000" ng-show="limit != 1000 && hit.group_members.length > 6" style="cursor: pointer; display: block; margin-left: 5px; margin-top: -25px; margin-bottom: 10px;"><span class='fa fa-angle-double-down fa-lg'></span></a>
+                                      <a ng-click="limit = 6" ng-show="limit == 1000 && hit.group_members.length > 6" style="cursor: pointer; display: block; margin-left: 5px; margin-top: -25px; margin-bottom: 10px;"><span class='fa fa-angle-double-up fa-lg'></span></a>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2" ng-if="resultsPresent">
+                    <p>&nbsp;</p>
+                </div>

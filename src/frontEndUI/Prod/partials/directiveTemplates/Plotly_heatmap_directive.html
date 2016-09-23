@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <!-- Latest compiled and minified JavaScript
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>-->
+</head>
+<body>
+  <div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-12">
+          <div id="vizCtrl" name="vizCtrl"></div>
+          <div id="evventSpan"></div>
+          <div id="heatmapIsLoading"></div>
+          <div id="heatmap" style="height: 400px; width: 200px;"></div>
+          <button class="btn btn-primary" style="margin-top: 5px;" ng-click="resizeHeatMap()"><span ng-show="!plotlyData.isFullSize">View Full Size</span><span ng-show="plotlyData.isFullSize">View Scaled Size</span></button>
+          <button class="btn btn-primary" style="margin-top: 5px;" ng-click="openPlotlyExternal()">Edit Chart</button>
+          <div class="btn-group dropup">
+            <button type="button" class="btn btn-primary dropdown-toggle" style="margin-top: 5px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Export <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <!--<li><a ng-click="exportData()" style="cursor: pointer;">All terms and values</a></li>-->
+              <li><a ng-click="exportXData()" style="cursor: pointer;">X terms ({{plotlyData.xValues.length}}) &nbsp;<i class="fa fa-arrow-right" style="color: #606060;"></i></a></li>
+              <li><a ng-click="exportYData()" style="cursor: pointer;">Y terms ({{plotlyData.yValues.length}}) <i class="fa fa-arrow-down" style="color: #606060;"></i></a></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

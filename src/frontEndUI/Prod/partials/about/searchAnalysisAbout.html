@@ -1,0 +1,97 @@
+<!--
+<div class="row">
+    <div class="col-sm-12">
+
+
+        <img class="rwdimgmap" src="../../images/oncolist2.png" usemap="#oncolistmap" alt="" />
+    	<map name="oncolistmap">
+    		<area shape="poly" coords="0,1850,400,1850,400,2300,0,2300" ng-click="showPage = 'GENEMODULES'" title="gene modules" alt="Oncolist click" />
+            <area shape="poly" coords="401,1850,800,1850,800,2300,401,2300" ng-click="showPage = 'CONDITIONS'" title="conditions" alt="Oncolist click" />
+            <area shape="poly" coords="801,1850,1200,1850,1200,2300,801,2300" ng-click="showPage = 'AUTHORS'" title="authors" alt="Oncolist click" />
+            <area shape="poly" coords="1201,1850,1600,1850,1600,2300,1201,2300" ng-click="showPage = 'DRUGS'" title="drugs" alt="Oncolist click" />
+    	</map>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <image style="width: 100%;" src="../../images/hr1.png" />
+    </div>
+</div>
+-->
+<style>
+
+    /* centered columns styles */
+    .row-centered {
+        text-align:center;
+    }
+    .col-centered {
+    }
+    .col-right {
+        text-align:right;
+    }
+    .col-left {
+        text-align:left;
+    }
+    .dash{
+      border: 0 none;
+      border-top: 2px dashed #979797;
+      background: none;
+      height:0;
+    }
+    .howitworkslink {
+        background-color: #979797;
+    }
+    @media (min-width: 769px) {
+        #mainImg {
+           position: absolute;
+           top: 116px;
+           left: 50%;
+           width: 1128px;
+           height: 284px;
+           margin-left: -640px; /* Half the width */
+           overflow-x: hidden;
+        }
+    }
+</style>
+<div ng-if="project.term_list.length < 1">
+    <div class="row hidden-xs">
+        <div class="col-sm-3">
+        </div>
+        <div class="col-sm-6">
+            <div class="input-group">
+              <span class="input-group-addon noShadow" id="basic-addon3">Gene list: </span>
+              <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+              <span class="input-group-btn">
+                  <button class="btn btn-default" ng-click="getSearchAnalysis()" type="button">Analyze</button>
+              </span>
+            </div>
+        </div>
+        <div class="col-sm-3">
+        </div>
+    </div>
+    <div class="row hidden-xs">
+        <div class="col-sm-3">
+        </div>
+        <div class="col-sm-6">
+            <p ng-repeat="groupResult in searchAnalysis.results[0].grouped_items | orderBy: ['topOverlap','groupTopQValue']">{{groupResult.group_title}} {{groupResult.groupTopQValue}}</p>
+        </div>
+        <div class="col-sm-3">
+        </div>
+    </div>
+
+    <div ng-if="1 === 0" class="row hidden-xs">
+        <div class="col-sm-7">
+            <a href="http://cytoscape.org" style="text-decoration: none;">
+                <image style="float: left; margin-left: 10px;" src="../../images/about/cytoscape.png" />
+            </a>
+        </div>
+        <div class="col-sm-5">
+            <a href="http://ccbb.bio" style="text-decoration: none;">
+                <image style="float: right; margin-right: 10px;" src="../../images/about/ccbb_bio.png" />
+            </a>
+        </div>
+    </div>
+
+    <p>&nbsp;</p>
+
+</div>

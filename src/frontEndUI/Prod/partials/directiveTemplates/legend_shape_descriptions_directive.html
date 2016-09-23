@@ -1,0 +1,69 @@
+<div style="margin-left: 15px; margin-top: 2px; margin-bottom: 2px;">
+
+    <div class="row" ng-repeat="shape in info.shapesArray">
+        <div class="col-xs-12">
+
+            <div style="margin-top: 5px;">
+                <div class="{{shape.shapeSource}}" ng-if="shape.shapeType === 'icon' && shape.shapeSource != 'diamond-icon'" style="width: 24px; margin-bottom: 5px; margin-right: 2px; float: left;"></div>
+                <div class="{{shape.shapeSource}}" ng-if="shape.shapeType === 'icon' && shape.shapeSource === 'diamond-icon'" style="width: 24px; margin-bottom: 5px; margin-right: 2px; float: left;"></div>
+                <div ng-if="shape.shapeType === 'image'" style="margin-bottom: 5px; margin-right: 2px; float: left;"><img src="{{shape.shapeSource}}" style="width: 26px; height: 26px;"/></div>
+                <div style="font-size: 12px; margin-top: 4px; margin-left: 5px; float: left;">{{shape.title}}</div>
+            </div>
+        </div>
+    </div>
+
+
+<!--
+
+    <div class="row">
+        <div class="col-xs-3">
+            <div class="media">
+              <div class="media-left" style="padding-right: 12px;">
+                <div class="circle-icon" style="margin-bottom: 5px;"></div>
+              </div>
+              <div class="media-body">
+                <span class="media-heading" style="font-size: 11px;">Gene</span>
+              </div>
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="media">
+              <div class="media-left media-middle" style="padding-right: 12px;">
+                <div class="triangle-icon" style="margin-bottom: 5px;"></div>
+              </div>
+              <div class="media-body">
+                <span class="media-heading" style="font-size: 11px;">miRNA</span>
+              </div>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="media">
+              <div class="media-left media-middle" style="padding-right: 0px;">
+                    <div class="diamond-icon"></div>
+              </div>
+              <div class="media-body">
+                <span class="media-heading" style="font-size: 11px;">DNA Mutation</span>
+              </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="media">
+              <div class="media-left" style="padding-right: 12px;">
+                  <img src="../images/query_gene.png" style="width: 26px; height: 26px;"/>
+              </div>
+              <div class="media-body">
+                <span class="media-heading" style="font-size: 11px;">Query Gene</span>
+              </div>
+            </div>
+        </div>
+        <div class="col-xs-3">
+        </div>
+        <div class="col-xs-3">
+        </div>
+    </div>
+-->
+</div>

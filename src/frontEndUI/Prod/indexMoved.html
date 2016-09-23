@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Oncolist Search Engine</title>
+    <script src="js/env.js" type="text/javascript"></script>
+    <script src="js/d3.v3.js" type="text/javascript"></script>
+    <link href="js/bootstrap-combined.min.css" rel="stylesheet" type="text/css"/> <!-- TEMP -->
+    <link href="js/font-awesome.min.css" rel="stylesheet" type="text/css"/> <!-- TEMP -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="js/bootstrap.min.css" rel="stylesheet" type="text/css"/> <!-- TEMP -->
+    <link href="css/commonstyles.css" rel="stylesheet" type="text/css"/>
+    <link href="css/angular-szn-autocomplete.css" rel="stylesheet" type="text/css"/> <!-- TEMP -->
+    <link href="css/sample1.css" rel="stylesheet" type="text/css"/> <!-- TEMP -->
+    <link href="css/checkboxes.css" rel="stylesheet" type="text/css"/> <!-- TEMP -->
+
+    <script src="js/jquery.min.js" type="text/javascript"></script>  <!--TEMP-->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.min.js"></script>
+    <script src="js/lodash.min.js" type="text/javascript"></script> <!-- TEMP-->
+    <script src="js/fisheye.js" type="text/javascript"></script>
+    <script src="js/services.js" type="text/javascript"></script>
+    <script src="js/angular-clipboard.js" type="text/javascript"></script>
+    <script src="js/angular-szn-autocomplete.js" type="text/javascript"></script>
+    <!--<script src="js/app2C.js" type="text/javascript"></script>-->
+    <script src="js/appMain.js" type="text/javascript"></script>
+    <script src="js/appMainCtrl.js" type="text/javascript"></script>
+    <script src="js/appResultsCtrl.js" type="text/javascript"></script>
+    <script src="js/bootstrap.min.js" type="text/javascript"></script>
+<!--    <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>-->
+    <script src="js/jsonp.js"></script>
+    <script src="https://d14fo0winaifog.cloudfront.net/plotly-basic.js"></script>
+    <script src="js/jquery.min.js" type="text/javascript"></script> <!-- TEMP-->
+    <script src="js/bootstrap-modal.js" type="text/javascript"></script>
+
+    <script src="js/colorbrewer.min.js"></script>
+    <style>
+        input[szn-autocomplete],
+        .szn-autocomplete-shadow-input {
+          width: 80%;
+          border: 1px solid #707070;
+          color: #222;
+          padding: 5px 10px;
+          font-size: 16px;
+          box-sizing: border-box;
+        }
+
+        .szn-autocomplete-shadow-input {
+          color: #666;
+        }
+
+        .szn-autocomplete-results {
+          padding: 0;
+          width: 95%;
+        }
+
+        .szn-autocomplete-results li {
+          padding: 5px;
+        }
+        .szn-autocomplete-results ul {
+          padding: 5px;
+          border-bottom: 1px solid #ccc;
+          border-left: 1px solid #ccc;
+          border-right: 1px solid #ccc;
+        }
+
+        .szn-autocomplete-results h5 {
+          margin: 0;
+          font-size: 15px;
+          font-weight: normal;
+        }
+
+        .szn-autocomplete-results p {
+          margin: 0;
+          white-space: normal;
+          font-size: 13px;
+        }
+
+        .szn-autocomplete-results .wordcount {
+          font-size: 13px;
+          color: #707070;
+        }
+
+        .modal-dialog {
+          width: 100%;
+          height: 100%;
+          margin: 0;
+          padding: 0;
+        }
+
+        .modal-content {
+          height: auto;
+          min-height: 100%;
+          border-radius: 0;
+        }
+      </style>
+  </head>
+
+
+    <body ng-app="myApp" ng-controller="myCtrl" data-spy="scroll" data-target="#myScrollspy" ng-init="init_page()" style="margin-bottom: 3px;">
+        <nav class="navbar navbar-default">
+          <div class="container-fluid" style="padding-left: 10px;">
+            <div class="navbar-header">
+              <a class="navbar-brand hidden-xs" ng-click="brandIconClick()" href="#">oncolist <span class="text-theme1"></span></a>
+              <!--<a data-toggle="modal" data-target="#myClusterModal" style="cursor: pointer;" ng-click="setClusterIFrameContent('http://localhost:63343/Prototype2/partials/Plotly_heatmap.html?geneList=OR2J3&termId=title&clusterId=AVKLDoalZi0bM3KTWbSQ&networkTitle=title')">
+                <span class="fa fa-th"></span> View Matrix</a>-->
+
+
+              <!--
+              ===============================
+                  SMALL VIEWSET SEARCH BOX
+              ===============================
+               -->
+              <div style="padding-top:7px; padding-left: 0px; padding-right: 5px; margin-bottom: 0px;" class="visible-xs">
+                <a class="navbar-brand" ng-click="brandIconClick()" href="#" style="margin-top:-10px; font-size: 10pt;">oncolist <span class="text-theme1"></span></a>
+                  <form class="form-search form-inline">
+                    <div class="input-group input-group-sm">
+
+
+                    </div><!-- /input-group -->
+                  </form>
+                  <span id="autocompleterTop2"></span>
+              </div>
+          </div>
+
+          </div>
+        </nav>
+
+
+
+        <p>&nbsp;</p>
+
+        <div class="container-fluid">
+            <!--
+           ===============================
+           ===============================
+              INFORMATION PANEL
+           ===============================
+           ===============================
+-->
+            <div ng-show="!resultsPresent">
+              <div class="row">
+                <div class="col-sm-3">
+                </div>
+
+                <div class="col-sm-6">
+                  <div class="well tutorial-panel">
+                    <h3>GENELI.ST has moved to ONCOLIST.ORG</h3>
+                    <p>
+
+                        You can reach the website by typing oncolist.org in your browser or clicking <a href="http://oncolist.org">here</a>
+                    </p>
+                  </div>
+                </div>
+
+
+                <div class="col-sm-3">
+                </div>
+              </div>
+            </div>
+<!--
+           ===============================
+           ===============================
+              END INFORMATION PANEL
+           ===============================
+           ===============================
+            -->
+        </div>
+        <div class="container-fluid">
+        </div>
+        <!--===============
+        //================
+        // END MAIN CONTAINER
+        //================
+        ===============-->
+        <script type="text/javascript">
+
+
+
+
+        </script>
+        <div id="timeViz"></div>
+
+    </body>
+</html>

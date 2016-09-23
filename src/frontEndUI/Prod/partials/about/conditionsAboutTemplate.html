@@ -1,0 +1,53 @@
+<style>
+
+    /* centered columns styles */
+    .row-centered {
+        text-align:center;
+    }
+    .col-centered {
+    }
+    .dash{
+      border: 0 none;
+      border-top: 2px dashed #979797;
+      background: none;
+      height:0;
+    }
+    .howitworkslink {
+        background-color: #979797;
+    }
+    @media (max-width: 768px) {
+        #mainImg {
+           position: absolute;
+           top: 80px;
+           left: 50%;
+           width: 1280px;
+           height: 2200px;
+           margin-left: -640px; /* Half the width */
+           overflow-x: hidden;
+        }
+    }
+    @media (min-width: 769px) {
+        #mainImg {
+           position: absolute;
+           top: 140px;
+           left: 50%;
+           width: 1280px;
+           height: 2200px;
+           margin-left: -640px; /* Half the width */
+           overflow-x: hidden;
+        }
+    }
+</style>
+<div class="row row-centered">
+    <a href="#/main-about" style="text-decoration: none;">
+        <img id="mainImg" src="../../images/about/oncolist_conditions3.png" alt="" />
+    </a>
+
+
+    <div class="col-sm-12 col-centered" id="mainImage">
+        <a href="#/main-about" style="text-decoration: none;">
+            <!--<image src="../../images/about/oncolist_conditions2.png" />-->
+        </a>
+    </div>
+    <a href="#/main-about" style="position: absolute; top: 120px; left: 35px; text-decoration: none;"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> back</a>
+</div>

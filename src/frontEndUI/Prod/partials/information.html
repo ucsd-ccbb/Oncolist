@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../js/env.js" charset="UTF-8" type="text/javascript"></script>
+    <link href="../js/bootstrap-combined.min.css" rel="stylesheet" type="text/css"/> <!-- TEMP -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
+    <link href="../js/bootstrap.min.css" rel="stylesheet" type="text/css"/> <!-- TEMP -->
+    <script src="../js/jquery-2.1.1.min.js" type="text/javascript"></script> <!-- TEMP-->
+    <script src="../js/elasticUI/angular.js" type="text/javascript"></script>
+    <script src="../js/lodash.min.js" type="text/javascript"></script> <!-- TEMP-->
+    <script src="../js/services.js" type="text/javascript"></script>
+    <!--<script src="js/app.js" type="text/javascript"></script>-->
+    <script src="../js/informationApp.js" type="text/javascript"></script>
+    <link href="../css/commonstyles.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/sample1.css" rel="stylesheet" type="text/css"/> <!-- TEMP -->
+
+
+
+
+
+
+   <!--<script src="js/app.js" type="text/javascript"></script>-->
+<!--
+   <link href="../js/bootstrap-combined.min.css" rel="stylesheet" type="text/css"/>
+   <link href="../js/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+   <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+   <link href="../css/commonstyles.css" rel="stylesheet" type="text/css"/>
+   <link href="../css/sample1.css" rel="stylesheet" type="text/css"/>
+
+
+   <script src="../js/jquery.min.js" type="text/javascript"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.min.js"></script>
+   <script src="../js/lodash.min.js" type="text/javascript"></script>
+   <script src="../js/services.js" type="text/javascript"></script>
+   <script src="../js/informationApp.js" type="text/javascript"></script>
+-->
+</head>
+<body ng-app="myApp" ng-controller="myCtrl" ng-init="init_page()">
+<div>
+        <div class="container-fluid">
+        <!--
+       ===============================
+         MAIN CONTAINER
+        ===============================
+        -->
+            <div class="row" ng-if="info.people_publications.length > 0">
+                <div class="col-sm-12">
+                  <h3>Publications</h3>
+                  <div ng-repeat="p_pub in info.people_publications" ng-init="limit = 3">
+                    <div class="slide-content">
+                      <div class="col-xs-12 col-sm-12 excerpet">
+                        <div style="background-color: whitesmoke; padding-top: 8px; padding-bottom: 5px; padding-left: 4px; border-bottom: 1px solid #C0C0C0; overflow-x: hidden;">
+                          <span style="line-height: 18px; font-size: 16px; margin-top: 8px; margin-left: 4px;">
+                              {{p_pub.name}} ({{p_pub.publications.length}}):
+                          </span>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-xs-1" style="width: 30px;">
+                            <a ng-click="limit = 1000" ng-show="limit != 1000 && p_pub.publications.length > 3" style="cursor: pointer; display: block; margin-left: 5px; margin-top: 10px; margin-bottom: 0px;"><span class='fa fa-plus-square-o fa-lg'></span></a>
+                            <a ng-click="limit = 3" ng-show="limit == 1000 && p_pub.publications.length > 3" style="cursor: pointer; display: block; margin-left: 5px; margin-top: 10px; margin-bottom: 0px;"><span class='fa fa-minus-square-o fa-lg'></span></a>
+                          </div>
+                          <div class="col-xs-11">
+                            <p ng-repeat="publication in p_pub.publications | limitTo:limit" style="margin-left: 0px; margin-top: 10px;">
+
+
+                              <a href="http://www.ncbi.nlm.nih.gov/pubmed/{{publication.PMID}}" class="visible-xs" style="text-decoration: none;"><i class="fa fa-file-text-o"></i>&nbsp;{{publication.title | cut:true:80:' ...'}}</a>
+                              <a href="http://www.ncbi.nlm.nih.gov/pubmed/{{publication.PMID}}" class="hidden-xs" style="text-decoration: none;"><i class="fa fa-file-text-o"></i>&nbsp;{{publication.title}}</a>
+                              {{publication.journal}} {{publication.date}}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" style="margin-top: 10px;" ng-if="info.termDescription.length > 0 && info.termDescription != 'none' && (info.currentTab === 'GENE' || info.currentTab === 'CONDITION_GENE' || info.currentTab === 'DRUG_GENE')">
+                <div class="col-sm-12">
+                    <div class="panel panel-primary">
+                      <div class="panel-heading">
+                          <h3 class="panel-title">Summary</h3>
+                      </div>
+                        <div class="panel-body">
+                          <div class="container-fluid">
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <img class="media-object pull-left" style="margin-right: 10px; margin-bottom: 5px;" width="74" height="72" src="../images/gene1.png" alt="...">
+                              <div>
+                                {{info.termDescription}}
+                                <br />
+                                <br />
+                                {{info.termEntrezDescription}}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+              <div class="row" style="margin-top: 10px;" ng-if="info.currentTab === 'CONDITION'">
+                <div class="col-sm-12">
+                    <div class="panel panel-default" ng-if="info.pubmedIds.length > 0">
+                      <div class="panel-heading">
+                          <h3 class="panel-title">Pubmed links</h3>
+                      </div>
+                        <div class="panel-body">
+                          <div class="container-fluid" ng-init="pubmed_limit=8">
+                              <div class="row">
+                                <div class="col-sm-12">
+                                    <div ng-repeat="pubmedId in info.pubmedIds | limitTo: pubmed_limit">
+                                        <a href="http://www.ncbi.nlm.nih.gov/pubmed/{{pubmedId}}">Pubmed: {{pubmedId}}</a>
+                                    </div>
+                                </div>
+                              </div>
+
+                              <button ng-click="pubmed_limit = 1000;" class="btn btn-link text-muted-dark" type="button" ng-show="pubmed_limit != 1000 && info.pubmedIds.length > 8" style="padding: 0px 5px 0px 0px; margin-left: -1px; cursor: pointer;">
+                                  <span class='fa fa-plus-square-o fa-lg'></span></button>
+                              <button ng-click="pubmed_limit = 8;" class="btn btn-link text-muted-dark" type="button" ng-show="pubmed_limit == 1000 && info.pubmedIds.length > 8" style="padding: 0px 5px 0px 0px;cursor: pointer;">
+                                  <span class='fa fa-minus-square-o fa-lg'></span></button>
+
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="panel panel-info" ng-if="info.cosmicIds.length > 0">
+                      <div class="panel-heading">
+                          <h3 class="panel-title">Cosmic links</h3>
+                      </div>
+                        <div class="panel-body">
+                          <div class="container-fluid" ng-init="cosmic_limit=8">
+                              <div class="row">
+                                <div class="col-sm-12">
+                                    <div ng-repeat="cosmicId in info.cosmicIds | orderBy: ['toString()'] | limitTo: cosmic_limit">
+                                        <span ng-repeat="cosmicIdPart in cosmicId.split('~')">
+                                            <a ng-if="$index == 0" style="text-decoration: none;" href="http://cancer.sanger.ac.uk/cosmic/mutation/overview?id={{cosmicIdPart.replace('COSM','')}}" target="_blank">Cosmic: {{cosmicIdPart}} </a>
+                                            <span class="label label-default" ng-if="$index == 1"> {{cosmicIdPart}}</span>
+                                        </span>
+                                    </div>
+                                </div>
+                              </div>
+
+                              <button ng-click="cosmic_limit = 1000;" class="btn btn-link text-muted-dark" type="button" ng-show="cosmic_limit != 1000 && info.cosmicIds.length > 8" style="padding: 0px 5px 0px 0px; margin-left: -1px; cursor: pointer;">
+                                  <span class='fa fa-plus-square-o fa-lg'></span></button>
+                              <button ng-click="cosmic_limit = 8;" class="btn btn-link text-muted-dark" type="button" ng-show="cosmic_limit == 1000 && info.cosmicIds.length > 8" style="padding: 0px 5px 0px 0px;cursor: pointer;">
+                                  <span class='fa fa-minus-square-o fa-lg'></span></button>
+
+                        </div>
+                      </div>
+                    </div>
+
+                </div>
+              </div>
+
+            <div class="row" ng-if="info.currentTab != 'PEOPLE_GENE' && info.currentTab != 'CONDITION'">
+                <div class="col-sm-12">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">External links</h3>
+                        </div>
+                        <div class="panel-body">
+                          <div class="container-fluid">
+                            <div class="row" ng-if="info.currentTab == 'GENE' || info.currentTab == 'CONDITION_GENE' || info.currentTab == 'DRUG_GENE'">
+                              <div class="col-sm-4">
+                                <div>
+                                    <a href="https://en.wikipedia.org/wiki/{{info.termId}}" style="text-decoration: none;"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-wikipedia-w fa-stack-1x"></i></span>
+                                      Wikipedia
+                                    </a><br />
+                                  </div>
+
+                                  <div>
+                                      <a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene={{info.termId}}" style="text-decoration: none;"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-genecard fa-stack-1x"></i></span>
+                                        Genecard
+                                      </a>
+                                    </div>
+
+                                    <div>
+                                      <a href="http://www.sigmaaldrich.com/catalog/genes/{{info.termId}}?lang=en&region=US" style="text-decoration: none;"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-sigmaaldrich fa-stack-1x"></i></span>
+                                        Sigma-Aldrich
+                                      </a>
+                                    </div>
+                              </div>
+                            </div>
+
+
+                            <div class="row" ng-if="info.currentTab == 'DRUG'">
+                              <div class="col-sm-4">
+                                  <div>
+                                    <a href="http://www.drugbank.ca/drugs/{{info.drugbank_id}}" target="_blank" style="text-decoration: none;"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-drugbank fa-stack-1x"></i></span>
+                                      Drug Bank (opens in new window)
+                                    </a><br />
+                                  </div>
+                              </div>
+                            </div>
+
+
+                            <div class="row" ng-if="info.currentTab == 'PEOPLE'">
+                              <div class="col-sm-4">
+                                <div>
+                                    <a href="https://en.wikipedia.org/wiki/{{info.termId}}" style="text-decoration: none;"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-wikipedia-w fa-stack-1x"></i></span>
+                                      Wikipedia
+                                    </a><br />
+                                  </div>
+
+                                  <div>
+                                      <a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene={{info.termId}}" style="text-decoration: none;"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-genecard fa-stack-1x"></i></span>
+                                        Genecard
+                                      </a>
+                                    </div>
+                                    <div>
+                                      <a href="http://www.sigmaaldrich.com/catalog/genes/{{info.termId}}?lang=en&region=US" style="text-decoration: none;"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-sigmaaldrich fa-stack-1x"></i></span>
+                                        Sigma-Aldrich
+                                      </a>
+                                    </div>
+                              </div>
+                            </div>
+
+
+                            <div class="row" ng-if="info.currentTab == 'PHENOTYPE'">
+                              <div class="col-sm-4">
+                                <div>
+                                    <a href="https://en.wikipedia.org/wiki/{{info.termId}}" style="text-decoration: none;"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-wikipedia-w fa-stack-1x"></i></span>
+                                      Wikipedia
+                                    </a><br />
+                                  </div>
+                                    <div ng-repeat="ptype_urls in info.phenotype_info.Phenotype_ids">
+                                      <a ng-if="ptype_urls.type != 'OMIM' && ptype_urls.type != 'Goo'" href="{{ptype_urls.url}}" style="text-decoration: none;">
+                                        <span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i>
+                                        <i class="fa fa-{{ptype_urls.type}} fa-stack-1x"></i></span>
+                                        {{ptype_urls.title}}
+                                      </a>
+                                      <a ng-if="ptype_urls.type == 'Goo'" target="_blank" href="{{ptype_urls.url}}" style="text-decoration: none;">
+                                        <span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i>
+                                        <i class="fa fa-{{ptype_urls.type}} fa-stack-1x"></i></span>
+                                        {{ptype_urls.title}}
+                                      </a>
+                                      <a ng-if="ptype_urls.type == 'OMIM'" target="_blank" href="{{ptype_urls.url}}" style="text-decoration: none;">
+                                        <span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i>
+                                        <i class="fa fa-{{ptype_urls.type}} fa-stack-1x"></i></span>
+                                        {{ptype_urls.title}}
+                                      </a>
+                                    </div>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div class="row" ng-if="info.snps.length > 0">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                          <h3 class="panel-title">SNPs</h3>
+                      </div>
+                        <div class="panel-body">
+                          <div class="container-fluid">
+
+                          <div class="row">
+
+                            <div class="col-sm-4">
+                              <ul class="nav nav-pills nav-stacked">
+                                <li role="presentation" ng-repeat="snp in info.snps">
+                                  {{snp}}
+                                </li>
+                                <li>more...</li>
+                              </ul>
+                            </div>
+
+
+                          </div>
+
+                          <div class="row">
+                            <div class="col-sm-4">
+
+
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+
+              <div class="row" ng-if="info.variants.length > 0">
+                  <div class="col-sm-12">
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{info.termId}} variants associated with {{info.condition}} and {{info.tissue}} tissue</h3>
+                        </div>
+                          <div class="panel-body">
+                            <div class="container-fluid">
+
+                            <div class="row" ng-init="limit.variants = 5">
+
+                              <div class="col-sm-4">
+                                <div ng-repeat="snp in info.variants | limitTo:limit.variants">
+                                  <a href="http://cancer.sanger.ac.uk/cosmic/mutation/overview?id={{snp.cosmicid.replace('COSM','')}}">{{snp.variant}} ({{snp.cosmicid}})</a><br />
+                                </div>
+                                <div class="btn-group" ng-if="info.variants.length > 5">
+                                    <button ng-click="limit.variants = 1000" class="btn btn-link text-muted-dark" type="button" ng-show="limit.variants != 1000 && info.variants.length > 5" style="padding: 0px 5px 0px 0px; margin-left: -1px; cursor: pointer;">
+                                        more...</button>
+                                    <button ng-click="limit.variants = 5" class="btn btn-link text-muted-dark" type="button" ng-show="limit.variants == 1000 && info.variants.length > 5" style="padding: 0px 5px 0px 0px;cursor: pointer;">
+                                        less</button>
+                                </div>
+
+
+                                <!--<ul class="nav nav-pills nav-stacked">
+                                  <li role="presentation" ng-repeat="snp in info.variants | limitTo:limit.variants">
+                                    <a href="http://cancer.sanger.ac.uk/cosmic/mutation/overview?id={{snp.cosmicid.replace('COSM','')}}">{{snp.variant}} ({{snp.cosmicid}})</a>
+                                  </li>
+                                  <li>
+                                      <div class="btn-group" ng-if="info.variants.length > 5">
+                                          <button ng-click="limit.variants = 1000" class="btn btn-link text-muted-dark" type="button" ng-show="limit.variants != 1000 && info.variants.length > 5" style="padding: 0px 5px 0px 0px; margin-left: -1px; cursor: pointer;">
+                                              more...</button>
+                                          <button ng-click="limit.variants = 5" class="btn btn-link text-muted-dark" type="button" ng-show="limit.variants == 1000 && info.variants.length > 5" style="padding: 0px 5px 0px 0px;cursor: pointer;">
+                                              less</button>
+                                      </div>
+                                  </li>
+                                </ul>
+                            -->
+                              </div>
+
+
+                            </div>
+
+                            <div class="row">
+                              <div class="col-sm-4">
+
+
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+
+
+        </div>
+
+    </div>
+  </body>
+  </html>

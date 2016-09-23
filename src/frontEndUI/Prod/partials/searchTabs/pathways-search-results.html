@@ -1,0 +1,392 @@
+<style>
+.filterSection {
+  border-bottom: 1px solid #e2e2e2;
+  padding: 9px 0 0 0;
+  margin-left: 40px;
+}
+
+.filterSectionHead {
+    margin-top: 0;
+    color: #444;
+    margin-bottom: 9px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+@media (min-width: 769px) {
+    .flexContainer {
+      display: -webkit-flex;
+      display: flex;
+    }
+    flexNav {
+      width: 320px;
+    }
+    .flex-column {
+      -webkit-flex: 1;
+              flex: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .flexContainer {
+    }
+    flexNav {
+      display: none;
+    }
+    .flex-column {
+        margin-left: 30px;
+    }
+}
+
+</style>
+
+<div class="row">
+    <div class="flexContainer">
+        <flexNav>
+            <div class="filterSection">
+              <div class="filterSectionHead">
+                <span class="filterSectionName">
+                    <!--<button class="btn btn-link" ng-click="showMore.filterDiseases = !showMore.filterDiseases;" style="margin-top: 0px; padding-left: 2px; text-decoration: none;">-->
+                        <span style="font-weight: bold;">Diseases</span>
+                    <!--    <i ng-show="!showMore.filterDiseases" class="fa fa-caret-right fa-lg" aria-hidden="true"></i><i ng-show="showMore.filterDiseases" class="fa fa-caret-down fa-lg" aria-hidden="true"></i>
+                        <span ng-show="!showMore.filterDiseases" style="margin-right: -1px;">&nbsp;</span>
+                    </button>-->
+                    <button class="btn btn-link clearFilter" style="padding-top: 0px; padding-bottom: 0px; border: 0px solid white;"
+                    ng-show="showMore.clusterFilteredDiseases.length != showMore.permaClusterFilteredDiseases.length"
+                    ng-click="diseasesFilterClear('DX')"><span class="fa fa-times"></span> <span style="font-size: 9pt; font-weight: normal; cursor: pointer;">clear</span></button>
+                </span>
+              </div>
+              <div class="filterSectionBody" ng-show="showMore.filterDiseases">
+                <!--<div ng-repeat="searchResultsGroup in searchResultsWithGroups| filter: geneTabFilter">-->
+                    <div class="checkbox checkbox-warning" ng-repeat="hit in showMore.permaClusterFilteredDiseases | orderBy:'toString()' | limitTo: showMore.filterDiseasesLimit" style="margin-left: 5px; white-space: nowrap;">
+                        <input id="DX{{$index}}" type="checkbox" ng-click="setClusterDiseaseFilter(hit)">
+                        <label for="DX{{$index}}" style="width: auto;">
+                            <span>{{hit | cut:true:32:' ...'}}</span>
+                        </label>
+                    </div>
+                    <div ng-if="showMore.permaClusterFilteredDiseases.length > 4;" style="margin-left: 13px; margin-top: -10px; margin-bottom: 15px; white-space: nowrap;">
+                        <label style="width: auto; font-weight: normal;">
+                            <a ng-show="showMore.filterDiseasesLimit == 4;" ng-click="showMore.filterDiseasesLimit = 1000;" style="margin-top: 0px; padding-left: 2px; cursor: pointer; text-decoration: none;">
+                                <i class="fa fa-caret-right fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;Show more disease filters
+                            </a>
+                            <a ng-show="showMore.filterDiseasesLimit == 1000;" ng-click="showMore.filterDiseasesLimit = 4;" style="margin-top: 0px; padding-left: 2px; cursor: pointer; text-decoration: none;">
+                                <i class="fa fa-caret-up fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;Hide disease filters
+                            </a>
+
+                        </label>
+                    </div>
+                <!--</div>-->
+              </div>
+            </div>
+
+            <div class="filterSection">
+              <div class="filterSectionHead">
+                <span class="filterSectionName">
+                    <!--<button class="btn btn-link" ng-click="showMore.filterAnnotations = !showMore.filterAnnotations;" style="margin-top: 0px; padding-left: 2px; text-decoration: none;">-->
+                        <span style="font-weight: bold;">Annotations</span>
+                    <!--    <i ng-show="!showMore.filterAnnotations" class="fa fa-caret-right fa-lg" aria-hidden="true"></i><i ng-show="showMore.filterAnnotations" class="fa fa-caret-down fa-lg" aria-hidden="true"></i>
+                        <span ng-show="!showMore.filterAnnotations" style="margin-right: -1px;">&nbsp;</span>
+                    </button>-->
+                    <button class="btn btn-link clearFilter" style="padding-top: 0px; padding-bottom: 0px; border: 0px solid white;"
+                    ng-show="showMore.clusterFilteredAnnotations.length != showMore.permaClusterFilteredAnnotations.length"
+                    ng-click="annotationFilterClear('AX')"><span class="fa fa-times"></span> <span style="font-size: 9pt; font-weight: normal; cursor: pointer;">clear</span></button>
+              </div>
+              <div class="filterSectionBody" ng-show="showMore.filterAnnotations">
+                <!--<div ng-repeat="searchResultsGroup in searchResultsWithGroups| filter: geneTabFilter">-->
+                  <div class="checkbox checkbox-warning" ng-repeat="hit in showMore.permaClusterFilteredAnnotations | orderBy: 'toString()' | limitTo: showMore.filterAnnotationsLimit" style="margin-left: 5px; white-space: nowrap;">
+                      <input id="AX{{$index}}" type="checkbox" ng-click="setClusterAnnotationFilter(hit)">
+                      <label for="AX{{$index}}" style="width: auto;">
+                          <span ng-if="hit == 'Other'">non-annotating</span>
+                          <span ng-if="hit != 'Other'">{{hit | cut:true:35:' ...'}}</span>
+                      </label>
+                  </div>
+                  <div ng-if="showMore.permaClusterFilteredAnnotations.length > 4;" style="margin-left: 13px; margin-top: -10px; margin-bottom: 15px; white-space: nowrap;">
+                      <label style="width: auto; font-weight: normal;">
+                          <a ng-show="showMore.filterAnnotationsLimit == 4;" ng-click="showMore.filterAnnotationsLimit = 1000;" style="margin-top: 0px; padding-left: 2px; cursor: pointer; text-decoration: none;">
+                              <i class="fa fa-caret-right fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;Show more annotation filters
+                          </a>
+                          <a ng-show="showMore.filterAnnotationsLimit == 1000;" ng-click="showMore.filterAnnotationsLimit = 4;" style="margin-top: 0px; padding-left: 2px; cursor: pointer; text-decoration: none;">
+                              <i class="fa fa-caret-up fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;Hide annotation filters
+                          </a>
+
+                      </label>
+                  </div>
+
+                <!--</div>-->
+              </div>
+            </div>
+
+            <div class="filterSection">
+              <div class="filterSectionHead">
+                <span class="filterSectionName">
+                    <!--<button class="btn btn-link" ng-click="showMore.filterMatrix = !showMore.filterMatrix;" style="margin-top: 0px; padding-left: 2px; text-decoration: none;">-->
+                        <span style="font-weight: bold;">Matrix type</span>
+                    <!--    <i ng-show="!showMore.filterMatrix" class="fa fa-caret-right fa-lg" aria-hidden="true"></i><i ng-show="showMore.filterMatrix" class="fa fa-caret-down fa-lg" aria-hidden="true"></i>
+                        <span ng-show="!showMore.filterMatrix" style="margin-right: -1px;">&nbsp;</span>
+                    </button>-->
+                    <button class="btn btn-link clearFilter" style="padding-top: 0px; padding-bottom: 0px; border: 0px solid white;"
+                    ng-show="showMore.clusterFilteredMatrixType.length != showMore.permaClusterFilteredMatrixType.length"
+                    ng-click="matrixTypeFilterClear('MX')"><span class="fa fa-times"></span> <span style="font-size: 9pt; font-weight: normal; cursor: pointer;">clear</span></button>
+                </span>
+              </div>
+              <div class="filterSectionBody" ng-show="showMore.filterMatrix">
+                  <!--<div ng-repeat="searchResultsGroup in searchResultsWithGroups| filter: geneTabFilter">-->
+                      <div class="checkbox checkbox-warning" ng-repeat="hit in showMore.permaClusterFilteredMatrixType" style="margin-left: 5px; white-space: nowrap;">
+                          <input id="MX{{$index}}" type="checkbox" ng-click="setClusterMatrixTypeFilter(hit)">
+                          <label for="MX{{$index}}" style="width: auto;">
+                              <span>{{hit | cut:true:30:' ...'}}</span>
+                          </label>
+                      </div>
+                  <!--</div>-->
+              </div>
+            </div>
+
+        </flexNav>
+
+        <div ng-show="searchResultsWithGroups.length > 0" class="flex-column" style="overflow-x: hidden;">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div style="padding-bottom:7px; padding-left: 0px; padding-right: 5px; margin-bottom: 0px; margin-top: 0px; margin-left: 15px;" class="visible-xs">
+                        <form class="form-search form-inline">
+                          <div class="input-group input-group-sm">
+                            <span class="input-group-btn">
+                              <button type="submit" style="margin-left: 7px; border-radius: 3px;" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="fa fa-filter"></span> filter results
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-left">
+                                  <li>
+                                      <div class="filterSection" style="margin-left: 5px;">
+                                        <div class="filterSectionHead">
+                                          <span class="filterSectionName">Diseases &nbsp;
+                                              <button class="btn btn-link clearFilter" style="padding-top: 0px; padding-bottom: 0px; border: 0px solid white;"
+                                              ng-show="showMore.clusterFilteredDiseases.length != showMore.permaClusterFilteredDiseases.length"
+                                              ng-click="diseasesFilterClear('DX')"><span class="fa fa-times"></span> <span style="font-size: 9pt; font-weight: normal; cursor: pointer;">clear</span></button>
+                                          </span>
+                                        </div>
+                                        <div class="filterSectionBody">
+                                          <div ng-repeat="searchResultsGroup in searchResultsWithGroups| filter: geneTabFilter">
+                                              <div class="checkbox checkbox-warning" ng-repeat="hit in searchResultsGroup.diseases | orderBy:'toString()'" style="margin-left: 5px; white-space: nowrap;">
+                                                  <input id="D{{$index}}" type="checkbox" ng-click="setClusterDiseaseFilter(hit)">
+                                                  <label for="D{{$index}}" style="width: auto;">
+                                                      <span>{{hit.disease_title | cut:true:30:' ...'}} ({{hit.count}})</span>
+                                                  </label>
+                                              </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                  </li>
+
+                                  </li>
+                                  <li>
+                                      <div class="filterSection" style="margin-left: 5px;">
+                                        <div class="filterSectionHead">
+                                          <span class="filterSectionName">Annotations &nbsp;
+                                              <button class="btn btn-link clearFilter" style="padding-top: 0px; padding-bottom: 0px; border: 0px solid white;"
+                                              ng-show="showMore.clusterFilteredAnnotations.length != showMore.permaClusterFilteredAnnotations.length"
+                                              ng-click="annotationFilterClear('AX')"><span class="fa fa-times"></span> <span style="font-size: 9pt; font-weight: normal; cursor: pointer;">clear</span></button>
+                                        </div>
+                                        <div class="filterSectionBody">
+                                          <div ng-repeat="searchResultsGroup in searchResultsWithGroups| filter: geneTabFilter">
+                                            <div class="checkbox checkbox-warning" ng-repeat="hit in searchResultsGroup.grouped_items | filter: clusterTopQValueFilterList | orderBy: 'group_title'" style="margin-left: 5px; white-space: nowrap;">
+                                                <input id="m_{{hit.topGOId}}" type="checkbox" ng-click="setClusterAnnotationFilter(hit.group_title)">
+                                                <label for="m_{{hit.topGOId}}" style="width: auto;">
+                                                    <span ng-if="hit.group_title == 'Other'">non-annotating</span>
+                                                    <span ng-if="hit.group_title != 'Other'">{{hit.group_title | cut:true:35:' ...'}}</span>
+                                                </label>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                  </li>
+                                <li>
+                                    <div class="filterSection" style="margin-left: 5px;">
+                                      <div class="filterSectionHead">
+                                        <span class="filterSectionName">Matrix type &nbsp;
+                                            <button class="btn btn-link clearFilter" style="padding-top: 0px; padding-bottom: 0px; border: 0px solid white;"
+                                            ng-show="showMore.clusterFilteredMatrixType.length != showMore.permaClusterFilteredMatrixType.length"
+                                            ng-click="matrixTypeFilterClear('MX')"><span class="fa fa-times"></span> <span style="font-size: 9pt; font-weight: normal; cursor: pointer;">clear</span></button>
+                                        </span>
+                                      </div>
+                                      <div class="filterSectionBody">
+                                          <div ng-repeat="searchResultsGroup in searchResultsWithGroups| filter: geneTabFilter">
+                                              <div class="checkbox checkbox-warning" ng-repeat="hit in showMore.permaClusterFilteredMatrixType" style="margin-left: 5px; white-space: nowrap;">
+                                                  <input id="M{{$index}}" type="checkbox" ng-click="setClusterDiseaseFilter(hit)">
+                                                  <label for="M{{$index}}" style="width: auto;">
+                                                      <span>{{hit | cut:true:35:' ...'}} ({{hit.count}})</span>
+                                                  </label>
+                                              </div>
+                                          </div>
+                                      </div>
+                                    </div>
+
+                                </li>
+                              </ul>
+                            </span>
+                          </div><!-- /input-group -->
+                        </form>
+                        <span id="autocompleterTop2"></span>
+                    </div>
+
+                    <div class="row" ng-repeat="searchResultsGroup in searchResultsWithGroups| filter: geneTabFilter" ng-init="sortThisData = 'topOverlap'">
+                        <div class="col-sm-12" ng-if="resultsPresent">
+                            <div class="modal fade" id="heatmapModal" tabindex="-1" role="dialog" aria-labelledby="heatmapModalLabel">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">Heat Map</h4>
+                                  </div>
+                                  <div class="modal-body">
+                                    <div id="heatmap_modal_body"></div>
+                                    <div id="heatmapIsLoading"></div>
+                                    <div id="heatmap"></div>
+                                    <button class="btn btn-primary" ng-click="resizeHeatMap()">View Full Size</button>
+                                    <button class="btn btn-primary" ng-click="openPlotlyExternal()">Edit Chart</button>
+                                  </div>
+                                  <div class="modal-footer" style="margin-top: 0px;">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div ng-repeat="hit in searchResultsGroup.grouped_items | filter: clusterTopQValueFilter | orderBy: ['topOverlap','groupTopQValue']:true" ng-init="limit = 3;" >
+                                <div class="slide-content" style="line-height: 10px;">
+                                    <div>
+                                    <div ng-repeat="hti_filtered in hit.group_members | filter:clusterMatrixTypeFilter as groupFiltered"></div>
+                                      <div ng-show="groupFiltered.length > 0" style="background-color: whitesmoke; padding-top: 8px; padding-bottom: 5px; padding-left: 4px; border-bottom: 1px solid #C0C0C0; overflow-x: hidden;">
+                                          <span style="line-height: 18px; font-size: 16px; margin-top: 8px; margin-left: 4px;">
+                                              <span ng-if="hit.group_title != 'Other'" ng-init="groupSorting = false;"><a style="color: #707070;" href="http://amigo.geneontology.org/amigo/term/{{hit.topGOId.replace('GO','GO:')}}" target="_blank">{{hit.group_title}} ({{hit.topGOId}})</a></span>
+                                              <span ng-show="hit.group_title == 'Other'">Non-annotating clusters:</span>
+                                          </span>
+                                      </div>
+                                      <div class="esc-separator" style="opacity: 1; background-color: rgb(214, 214, 214);"></div>
+                                      <div ng-repeat="group_hit in hit.group_members | filter: clusterMatrixTypeFilter | orderBy: ['emphasizeInfoArray.length','topQValue']:true | limitTo:limit" class="row" ng-init="limit_gene = 5;"  style="margin-left: 25px;">
+                                          <a data-toggle="modal" ng-if="group_hit.hit_id.substr(0,3) != '209'" data-target="#myClusterModal" style="cursor: pointer;"
+                                          ng-click="searchResults.info.showVisDefault = true; searchResults.info.clusterId = group_hit.hit_id; searchResults.info.overlap = group_hit.overlapList; searchResults.info.clusterTitle = group_hit.diseaseType + ' cluster ' + group_hit.hit_id + group_hit.cluster_algorithm; resizeDirective();">
+                                              <img class="pull-left hidden-xs" style="margin-right: 5px; margin-top: 15px; width: 85px; height: 85px;" alt="preview not available" src="http://ec2-52-32-210-84.us-west-2.compute.amazonaws.com:3000/thumbnails/{{group_hit.hit_id}}.png" />
+                                          </a>
+                                          <span></span>
+                                        <h5 style="cursor: pointer;" ng-if="group_hit.hit_id.substr(0,3) != '209'">
+                                            <a data-toggle="modal" data-target="#myClusterModal" style="cursor: pointer;"
+                                                ng-click="searchResults.info.showVisDefault = true; searchResults.info.clusterId = group_hit.hit_id; searchResults.info.overlap = group_hit.overlapList; searchResults.info.clusterTitle = group_hit.diseaseType + ' cluster ' + group_hit.hit_id + group_hit.cluster_algorithm; resizeDirective();">
+                                                {{group_hit.diseaseType}} cluster {{group_hit.hit_id}}{{group_hit.cluster_algorithm}}
+                                            </a>
+                                        </h5>
+
+                                        <a data-toggle="modal" ng-if="group_hit.hit_id.substr(0,3) == '209'" data-target="#myClusterModal" style="cursor: pointer;" ng-click="setClusterIFrameContent('VisJS_heatmap_rendered.html?geneList=INVALIDGENE'
+                                        + '&termId=' + group_hit.diseaseType + ' cluster ' + group_hit.hit_id + '&clusterId=' + group_hit.hit_id + '&networkTitle=' + group_hit.diseaseType + ' cluster ' + group_hit.hit_id, group_hit.hit_id, group_hit.overlapList);">
+                                            <img class="pull-left hidden-xs" style="margin-right: 5px; margin-top: 15px; width: 85px; height: 85px;" alt="preview not available" src="http://ec2-52-32-210-84.us-west-2.compute.amazonaws.com:3000/thumbnails/{{group_hit.hit_id}}.png" />
+                                        </a>
+                                          <h5 style="cursor: pointer;" ng-if="group_hit.hit_id.substr(0,3) == '209'">
+                                              rendered
+                                              <a data-toggle="modal" data-target="#myClusterModal" style="cursor: pointer;" ng-click="setClusterIFrameContent('VisJS_heatmap_rendered.html?geneList=INVALIDGENE'
+                                              + '&termId=' + group_hit.diseaseType + ' cluster ' + group_hit.hit_id + '&clusterId=' + group_hit.hit_id + '&networkTitle=' + group_hit.diseaseType + ' cluster ' + group_hit.hit_id, group_hit.hit_id, group_hit.overlapList)">
+                                                {{group_hit.diseaseType}} cluster {{group_hit.hit_id}}{{group_hit.cluster_algorithm}}
+                                                </a>
+                                          </h5>
+                                          <p style="display: none;">
+                                            <span style="font-weight: bold;">Overlap Count:</span>
+                                              {{group_hit.emphasizeInfoArray.length}}
+                                               score: {{group_hit.searchResultScoreRank}}
+                                          </p>
+
+                                          <p> <!--ng-if="hit.group_title != 'Other'">-->
+                                            <span style="font-weight: bold;">Search score</span>
+                                              <!--{{group_hit.topQValue | number:1}}
+                                              <span ng-if="group_hit.topQValue >= 12" class="fa fa-square" style="color: #90A959;"></span>
+                                              <span ng-if="group_hit.topQValue < 12 && group_hit.topQValue >= 5" class="fa fa-square" style="color: #FEFB94;"></span>
+                                              <span ng-if="group_hit.topQValue < 5" class="fa fa-square" style="color: #AC4142;"></span>-->
+                                              <input type="hidden" class="rating" value="{{group_hit.luceneScore}}" data-start="0" data-stop="10" data-fractions="5" data-filled="symbolx symbolx-filled" data-empty="symbolx symbolx-empty" data-readonly/>
+                                          </p>
+                                          <p>
+                                            <span style="font-weight: bold;">Data type:</span>
+                                              {{group_hit.dataSetType}} ({{group_hit.x_count}} x {{group_hit.y_count}})
+                                          </p>
+                                          <p>
+                                                <span style="font-weight: bold;">Data source:</span>
+                                                <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc={{group_hit.gse_number}}" style="cursor: pointer;" ng-if="group_hit.gse_number.length > 0" target="_blank">
+                                                    {{group_hit.Source}} ({{group_hit.gse_number}})
+                                                </a>
+                                                <span ng-if="group_hit.gse_number.length < 1">
+                                                    {{group_hit.Source}}
+                                                </span>
+                                          </p>
+                                          <p>
+                                              <div class="btn-group" ng-if="currentTab == 'PATHWAYS'" style=" margin-bottom: 5px;">
+                                                <button class="btn btn-more btn-xs" style="cursor: default;" type="button">Overlaping query terms:</button>
+                                                <button ng-click="limit_gene = 1000" class="btn btn-link text-muted-dark" type="button" ng-show="limit_gene != 1000 && group_hit.emphasizeInfoArray.length > 5" style="padding: 0px 5px 0px 0px; margin-left: -1px; cursor: pointer;">
+                                                    <span class='fa fa-plus-square-o fa-lg'></span></button>
+                                                <button ng-click="limit_gene = 5" class="btn btn-link text-muted-dark" type="button" ng-show="limit_gene == 1000 && group_hit.emphasizeInfoArray.length > 5" style="padding: 0px 5px 0px 0px;cursor: pointer;">
+                                                    <span class='fa fa-minus-square-o fa-lg'></span></button>
+
+                                                  <button ng-repeat="enphasizeThis in group_hit.emphasizeInfoArray | orderBy:'toString()' | limitTo:limit_gene"
+                                                   ng-click="setIFrameContent('information.html?termId=' + enphasizeThis + '&currentTab=GENE&snps=')"
+                                                    data-toggle="modal" data-target="#myModal"
+                                                          class="btn btn-default btn-xs" type="button">{{enphasizeThis}}</button>
+                                                  <img src="images/buttonFadeSmall.png" style="margin-left: 0px;" ng-if="limit_gene == 5 &&  group_hit.emphasizeInfoArray.length > 5"></img>
+                                              </div>
+                                          </p>
+                                      </div>
+                                      <a ng-click="limit = 1000; updateRating();" class="pull-left" ng-show="limit != 1000 && hit.group_members.length > 3" style="cursor: pointer; display: block; margin-left: 5px; margin-top: -25px; margin-bottom: 10px;"><span class='fa fa-angle-double-down fa-lg'></span></a>
+                                      <a ng-click="limit = 3;" class="pull-left" ng-show="limit == 1000 && hit.group_members.length > 3" style="cursor: pointer; display: block; margin-left: 5px; margin-top: -25px; margin-bottom: 10px;"><span class='fa fa-angle-double-up fa-lg'></span></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>&nbsp;</p>
+<!--                            <div class="row">
+                                <div class="col-xs-4 hidden-xs">
+                                </div>
+                                <div class="col-xs-4">
+                                -->
+                                    <nav ng-if="showMore.filterState == 'PAGED'">
+                                      <ul class="pagination pagination-lg" style="margin-left: 20px;">
+                                        <li ng-show="searchResultsGroup.page_number != '1'" ng-class="searchResultsGroup.page_number === '1' ? 'disabled': ''">
+                                            <a ng-if="searchResultsGroup.page_number === '1'" style="cursor: not-allowed;" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                                            <a ng-if="searchResultsGroup.page_number != '1'" ng-click="pathwaysClickPaged(showMoreResults.pagingClusterPage - 1); showMoreResults.pagingClusterPage = showMoreResults.pagingClusterPage - 1;" style="cursor: pointer;" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                                        </li>
+                                        <li ng-class="searchResultsGroup.page_number === '1' ? 'active': ''"><a ng-click="showMoreResults.pagingClusterPage = 1; pathwaysClickPaged(1);" style="cursor: pointer;">1</a></li>
+                                        <li ng-class="searchResultsGroup.page_number === '2' ? 'active': ''"><a ng-click="showMoreResults.pagingClusterPage = 2; pathwaysClickPaged(2);" style="cursor: pointer;">2</a></li>
+                                        <li ng-class="searchResultsGroup.page_number === '3' ? 'active': ''"><a ng-click="showMoreResults.pagingClusterPage = 3; pathwaysClickPaged(3);" style="cursor: pointer;">3</a></li>
+                                        <li ng-class="searchResultsGroup.page_number === '4' ? 'active': ''"><a ng-click="showMoreResults.pagingClusterPage = 4; pathwaysClickPaged(4);" style="cursor: pointer;">4</a></li>
+                                        <li ng-show="searchResultsGroup.page_number != '4'" ng-class="searchResultsGroup.page_number === '4' ? 'disabled': ''">
+                                            <a ng-if="searchResultsGroup.page_number === '4'" style="cursor: not-allowed;" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+                                            <a ng-if="searchResultsGroup.page_number != '4'" ng-click="pathwaysClickPaged(showMoreResults.pagingClusterPage + 1); showMoreResults.pagingClusterPage = showMoreResults.pagingClusterPage + 1;" style="cursor: pointer;" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+                                        </li>
+                                      </ul>
+                                    </nav>
+<!--                                </div>
+                                <div class="col-xs-4 hidden-xs">
+                                </div>
+                            </div>-->
+                            <p>&nbsp;</p>
+                            <p class="visible-xs">&nbsp</p>
+                            <p class="visible-xs">&nbsp</p>
+                            <p class="visible-xs">&nbsp</p>
+                            <p class="visible-xs">&nbsp</p>
+                            <p class="visible-xs">&nbsp</p>
+                            <p class="visible-xs">&nbsp</p>
+                            <p class="visible-xs">&nbsp</p>
+                            <p class="visible-xs">&nbsp</p>
+                            <p class="visible-xs">&nbsp</p>
+                            <p class="visible-xs">&nbsp</p>
+                            <p class="visible-xs">&nbsp</p>
+                            <p class="visible-xs">&nbsp</p>
+                            <p class="visible-xs">&nbsp</p>
+                            <p class="visible-xs">&nbsp</p>
+                            <p class="visible-xs">&nbsp</p>
+                            <p class="visible-xs">&nbsp</p>
+                            <p class="visible-xs">&nbsp</p>
+                            <p class="visible-xs">&nbsp</p>
+                            <p class="visible-xs">&nbsp</p>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                </script>
+                <div class="col-sm-2" ng-if="resultsPresent">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
